@@ -114,6 +114,30 @@ class CourtStations extends React.Component {
                                 : <div className="alert alert-danger" role="alert">An error occurred while adding location
                                 </div>
                         })
+                        this.props.graphql
+                            .query({
+                                fetchOptionsOverride: fetchOptionsOverride,
+                                resetOnLoad: true,
+                                operation: {
+                                    query: courtStations
+                                }
+                            })
+                            .request.then(({data, loading, error}) => {
+                            if (data) {
+                                if (data.courtStations.length > 0) {
+                                    this.setState({courtStations: data.courtStations})
+                                } else {
+                                    this.setState({message: 'No court stations found'})
+                                }
+                            } else if (loading) {
+
+                                this.setState({loading: true})
+                            } else if (error) {
+
+                                this.setState({error: true})
+                            }
+
+                        })
                     }
                 }
             )
@@ -123,9 +147,6 @@ class CourtStations extends React.Component {
     onChange(e) {
         this.setState({[e.target.name]: e.target.value})
     }
-
-
-
 
 
 
