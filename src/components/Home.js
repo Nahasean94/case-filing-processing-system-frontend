@@ -40,7 +40,7 @@ class Home extends React.Component {
             <h4>Proceed as:</h4>
             <ul className="list-unstyled">
                 <li><Link to="/advocates/signin">Advocate</Link></li>
-                <li><Link to="/registrar/signin">Deputy Registrar</Link></li>
+                <li><Link to="/deputy-registrar/signin">Deputy Registrar</Link></li>
                 <li><Link to="/assistant/signin">Assistant of the court</Link></li>
                 <li><Link to="/court-admin/signin">Court station admin</Link></li>
             </ul>

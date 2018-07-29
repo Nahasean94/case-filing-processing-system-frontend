@@ -19,6 +19,9 @@ import DeputyRegistrar from "./components/court-station-admin/deputy-registrar/D
 import CourtAssistantLogin from "./components/court-assistant/CourtAssistantLogin"
 import requireAssistantAuth from "./components/utils/requireAssistantAuth"
 import CourtAssistantDashboard from "./components/court-assistant/CourtAssistantDashboard"
+import DeputyRegistrarLogin from "./components/deputy-registrar/DeputyRegistrarLogin"
+import DeputyRegistrarDashboard from "./components/deputy-registrar/DeputyRegistrarDashboard"
+import requireDeputyRegistrarAuth from "./components/utils/requireDeputyRegistrarAuth"
 
 export default () => {
 
@@ -41,6 +44,10 @@ export default () => {
                         <Route exact path="/assistant/signin" component={CourtAssistantLogin}
                     />
                         <Route exact path="/assistant/dashboard" component={requireAssistantAuth(CourtAssistantDashboard)}
+                    />
+                        <Route exact path="/deputy-registrar/dashboard" component={requireDeputyRegistrarAuth(DeputyRegistrarDashboard)}
+                    />
+                        <Route exact path="/deputy-registrar/signin" component={DeputyRegistrarLogin}
                     />
 
                     </Switch>
