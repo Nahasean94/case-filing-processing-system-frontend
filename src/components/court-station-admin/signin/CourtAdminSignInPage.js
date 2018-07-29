@@ -6,7 +6,7 @@ import CourtAdminSignupForm from "./CourtAdminSignupForm"
 import CourtAdminLoginForm from "./CourtAdminLoginForm"
 import Select from 'react-select'
 
-let court_stationOptions
+let courtStationOptions
 
 class CourtAdminSignInPage extends React.Component {
     constructor(props) {
@@ -81,7 +81,7 @@ class CourtAdminSignInPage extends React.Component {
                         >
                             {({loading, data}) => {
                                 if (data) {
-                                    court_stationOptions = data.courtStations.map(court_station => {
+                                    courtStationOptions = data.courtStations.map(court_station => {
                                         return {
                                             label: court_station.name,
                                             value: court_station.id
@@ -90,7 +90,7 @@ class CourtAdminSignInPage extends React.Component {
                                     return <Select
                                         closeOnSelect={true}
                                         onChange={this.checkCourtAdminExists}
-                                        options={court_stationOptions}
+                                        options={courtStationOptions}
                                         placeholder="Search CourtStations"
                                         removeSelected={true}
                                         value={this.state.court_station}/>
