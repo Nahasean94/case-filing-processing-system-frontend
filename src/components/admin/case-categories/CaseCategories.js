@@ -107,6 +107,7 @@ class CaseCategories extends React.Component {
                             isLoading: false,
                             invalid: false,
                             loading: false,
+                            caseCategories:[data.addCaseCategory,...this.state.caseCategories],
                             message: data.addCaseCategory
                                 ? <div className="alert alert-success" role="alert">Successfully added court station
                                     "{data.addCaseCategory.name}"
@@ -114,30 +115,7 @@ class CaseCategories extends React.Component {
                                 : <div className="alert alert-danger" role="alert">An error occurred while adding case category
                                 </div>
                         })
-                        this.props.graphql
-                            .query({
-                                fetchOptionsOverride: fetchOptionsOverride,
-                                resetOnLoad: true,
-                                operation: {
-                                    query: caseCategories
-                                }
-                            })
-                            .request.then(({data, loading, error}) => {
-                            if (data) {
-                                if (data.caseCategories.length > 0) {
-                                    this.setState({caseCategories: data.caseCategories})
-                                } else {
-                                    this.setState({message: 'No case categories found'})
-                                }
-                            } else if (loading) {
 
-                                this.setState({loading: true})
-                            } else if (error) {
-
-                                this.setState({error: true})
-                            }
-
-                        })
                     }
                 }
             )

@@ -2,21 +2,22 @@ import React from 'react'
 import Menu from "../Menu"
 import {Consumer} from "graphql-react"
 import {fetchOptionsOverride} from "../../../shared/fetchOverrideOptions"
-import CourtStationView from "./CourtSationView"
-import {addCourtStation, courtStations, isCourtStationExists} from "../../../shared/queries"
+import FormFeeStructureView from "./FormFeeStructureView"
+import {addFormFeeStructure, formFeeStructures, isFormFeeStructureExists} from "../../../shared/queries"
 import PropTypes from 'prop-types'
 import {isEmpty} from "lodash"
 import validator from "validator"
-import TextFieldGroup from '../../../shared/TextFieldsGroup'
+import CustomFieldGroup from "../../../shared/CustomTextFieldGroup"
 
-class CourtStations extends React.Component {
+class FormFeeStructures extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
             id: '',
             name: '',
-            showNewCourtStationForm: false,
-            courtStations: [],
+            fee: 0,
+            showNewCaseCategoryForm: false,
+            formFeeStructures: [],
             error: false,
             errors: {},
             isLoading: false,
@@ -24,15 +25,15 @@ class CourtStations extends React.Component {
             loading: false,
             message: ''
         }
-        this.onSelectLocation = this.onSelectLocation.bind(this)
-        this.showNewCourtStationForm = this.showNewCourtStationForm.bind(this)
-        this.closeNewCourtStationForm = this.closeNewCourtStationForm.bind(this)
+        this.onSelectCaseCategory = this.onSelectCaseCategory.bind(this)
+        this.showNewCaseCategoryForm = this.showNewCaseCategoryForm.bind(this)
+        this.closeNewCaseCategoryForm = this.closeNewCaseCategoryForm.bind(this)
         this.onChange = this.onChange.bind(this)
         this.onSubmit = this.onSubmit.bind(this)
-        this.checkLocationExists = this.checkLocationExists.bind(this)
+        this.checkCaseCategoryExists = this.checkCaseCategoryExists.bind(this)
     }
 
-    checkLocationExists() {
+    checkCaseCategoryExists() {
         this.props.graphql
             .query({
                 fetchOptionsOverride: fetchOptionsOverride,
@@ -41,15 +42,15 @@ class CourtStations extends React.Component {
                     variables: {
                         name: this.state.name,
                     },
-                    query: isCourtStationExists
+                    query: isFormFeeStructureExists
                 }
             })
             .request.then(({data}) => {
 
             if (data) {
-                if (data.isCourtStationExists.exists) {
+                if (data.isFormFeeStructureExists.exists) {
                     let errors = {}
-                    errors.name = 'A location with that name already exists'
+                    errors.name = 'A form with that name already exists'
                     this.setState({errors, invalid: true,})
                 } else {
                     let errors = {}
@@ -66,6 +67,9 @@ class CourtStations extends React.Component {
 
         if (validator.isEmpty(data.name)) {
             errors.name = 'This field is required'
+        }
+        if (!data.fee) {
+            errors.fee = 'This field is required'
         }
 
 
@@ -94,8 +98,9 @@ class CourtStations extends React.Component {
                     operation: {
                         variables: {
                             name: this.state.name,
+                            fee: this.state.fee,
                         },
-                        query: addCourtStation
+                        query: addFormFeeStructure
                     }
                 })
                 .request.then(({data}) => {
@@ -107,12 +112,13 @@ class CourtStations extends React.Component {
                             isLoading: false,
                             invalid: false,
                             loading: false,
-                            courtStations:[data.addCourtStation,...this.state.courtStations],
-                            message: data.addCourtStation
-                                ? <div className="alert alert-success" role="alert">Successfully added court station
-                                    "{data.addCourtStation.name}"
+                            formFeeStructures: [data.addFormFeeStructure, ...this.state.formFeeStructures],
+                            message: data.addFormFeeStructure
+                                ? <div className="alert alert-success" role="alert">Successfully added Form
+                                    "{data.addFormFeeStructure.name}"
                                 </div>
-                                : <div className="alert alert-danger" role="alert">An error occurred while adding location
+                                : <div className="alert alert-danger" role="alert">An error occurred while form
+                                    category
                                 </div>
                         })
 
@@ -127,22 +133,19 @@ class CourtStations extends React.Component {
     }
 
 
-
     componentDidMount() {
         this.props.graphql
             .query({
                 fetchOptionsOverride: fetchOptionsOverride,
                 resetOnLoad: true,
                 operation: {
-                    query: courtStations
+                    query: formFeeStructures
                 }
             })
             .request.then(({data, loading, error}) => {
             if (data) {
-                if (data.courtStations.length > 0) {
-                    this.setState({courtStations: data.courtStations})
-                } else {
-                    this.setState({message: 'No court stations found'})
+                if (data.formFeeStructures.length > 0) {
+                    this.setState({formFeeStructures: data.formFeeStructures})
                 }
             } else if (loading) {
 
@@ -155,74 +158,88 @@ class CourtStations extends React.Component {
         })
     }
 
-    onSelectLocation(id, name) {
+    onSelectCaseCategory(id, name) {
         this.setState({id, name})
     }
 
-    showNewCourtStationForm() {
-        this.setState({showNewCourtStationForm: true})
+    showNewCaseCategoryForm() {
+        this.setState({showNewCaseCategoryForm: true})
     }
 
-    closeNewCourtStationForm() {
-        this.setState({showNewCourtStationForm: false})
+    closeNewCaseCategoryForm() {
+        this.setState({showNewCaseCategoryForm: false})
     }
 
     render() {
-        const {showNewCourtStationForm, courtStations, errors,error, loading, message, isLoading, invalid} = this.state
+        const {showNewCaseCategoryForm, formFeeStructures, errors, error, loading, message, isLoading, invalid} = this.state
         return (<div className="container">
             <div className="row">
                 <div className="col-sm-3 col-md-3 bd-sidebar">
-                    <Menu router={this.context.router} active="court-station"/>
+                    <Menu router={this.context.router} active="case-forms"/>
                 </div>
-                <div className="col-sm-8 bd-content">
-                    {!showNewCourtStationForm ?
-                        <button className="btn btn-sm btn-success" onClick={this.showNewCourtStationForm}><span><i
+                <div className="col-sm-9 bd-content">
+                    {!showNewCaseCategoryForm ?
+                        <button className="btn btn-sm btn-success" onClick={this.showNewCaseCategoryForm}><span><i
                             className="fa fa-plus"></i></span></button> :
-                        <button className="btn btn-sm btn-success" onClick={this.closeNewCourtStationForm}><span><i
+                        <button className="btn btn-sm btn-success" onClick={this.closeNewCaseCategoryForm}><span><i
                             className="fa fa-angle-double-up"></i></span></button>}
                     <br/><br/>
-                    {showNewCourtStationForm && <div>
+                    {showNewCaseCategoryForm && <div>
                         {message && <div>{message}</div>}
-                        <form onSubmit={this.onSubmit}>
-                            <TextFieldGroup
-                                label="Name"
-                                type="name"
-                                name="name"
-                                value={this.state.name} autoFocus={true}
-                                onChange={this.onChange}
-                                error={errors.name}
-                                checkLocationExists={this.checkLocationExists}
-                            />
-                            <div className="form-group row">
-                                <div className="col-sm-9 offset-sm-3 ">
+                        <form onSubmit={this.onSubmit} className="form-row ">
+                            <div className="col-md-5 ">
+                                <CustomFieldGroup
+                                    label="Name"
+                                    type="name"
+                                    name="name"
+                                    value={this.state.name} autoFocus={true}
+                                    onChange={this.onChange}
+                                    error={errors.name}
+                                    checkLocationExists={this.checkCaseCategoryExists}
+                                />
+                            </div>
+                            <div className="col-md-5">
+                                <CustomFieldGroup
+                                    label="Fee"
+                                    type="number"
+                                    name="fee"
+                                    value={this.state.fee}
+                                    onChange={this.onChange}
+                                    error={errors.fee}
+                                />
+                            </div>
+                            <div className="col-md-2">
+                                <div className="form-group ">
                                     <button disabled={isLoading || invalid} className="btn btn-dark btn-sm form-control"
                                             type="submit">Save
                                     </button>
+
                                 </div>
                             </div>
                         </form>
                     </div>}
-                    {courtStations.length > 0 ?
+                    {formFeeStructures.length > 0 ?
                         <table className="table ">
                             <thead>
                             <tr>
                                 <th scope="col">Name</th>
+                                <th scope="col">Fee (KES)</th>
                             </tr>
                             </thead>
                             <tbody>
-                            {courtStations.map(station => {
-                                return <CourtStationView station={station}/>
+                            {formFeeStructures.map(station => {
+                                return <FormFeeStructureView station={station}/>
 
                             })}
                             </tbody>
-                        </table> : <div className="alert alert-dark">No stations found</div>}
+                        </table> : <div className="alert alert-dark">No forms found</div>}
 
                     {loading && <div className="progress">
                         <div className="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
                              aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
                     </div>
                     }
-                    {error && <div className="alert alert-dark">An error occurred while fetching court stations</div>}
+                    {error && <div className="alert alert-dark">An error occurred while fetching forms</div>}
 
 
                 </div>
@@ -232,7 +249,7 @@ class CourtStations extends React.Component {
     }
 }
 
-CourtStations.contextTypes = {
+FormFeeStructures.contextTypes = {
     router: PropTypes.object.isRequired
 }
-export default () => <Consumer>{graphql => <CourtStations graphql={graphql}/>}</Consumer>
+export default () => <Consumer>{graphql => <FormFeeStructures graphql={graphql}/>}</Consumer>
