@@ -7,22 +7,6 @@ const advocateLogin = `
   }
 }
 `
-const login = `
-   mutation($username:String!,$password:String!) {
-  login(username:$username,password:$password) {
-    token
-    ok
-    error
-  }
-}
-`
-const signup = `
-   mutation($username:String!,$email:String!,$password:String!) {
-  signup(username:$username,email:$email,password:$password) {
-   id
-  }
-}
-`
 const registerAdvocate = `
    mutation($practice_number:Int!,$surname:String,$first_name:String!,$last_name:String!, $dob:String!,$gender:String!, $password:String!,$email:String!,$cellphone:Long!,){          
   registerAdvocate(practice_number:$practice_number,surname:$surname,first_name:$first_name,last_name:$last_name, dob:$dob,gender:$gender, password:$password,email:$email,cellphone:$cellphone){
@@ -31,7 +15,7 @@ const registerAdvocate = `
 }
 `
 const isAdvocateExists = `
-   mutation($practice_number:Int!) {
+   query($practice_number:Int!) {
   isAdvocateExists( practice_number:$practice_number) {
    exists
   }
@@ -53,13 +37,49 @@ const addCourtStation = `
 }
 
 `
+const login = `
+   mutation($username:String!,$password:String!) {
+  login(username:$username,password:$password) {
+    token
+    ok
+    error
+  }
+}
+`
 const adminExists = `
    {
   adminExists{
    exists
   }
+}`
+const registerAdmin = `
+mutation($username:String!,$password:String!){
+registerAdmin(username:$username,password:$password){
+id
+}
+}`
+const courtAdminLogin = `
+   mutation($username:String!,$password:String!,$court_station:ID!) {
+  courtAdminLogin(username:$username,password:$password,court_station:$court_station) {
+    token
+    ok
+    error
+  }
 }
 `
+const isCourtAdminExists = `
+   query($court_station:ID!){
+  isCourtAdminExists(court_station:$court_station){
+   exists
+  }
+}`
+const registerCourtAdmin = `
+mutation($username:String!,$password:String!,$court_station:ID!){
+registerCourtAdmin(username:$username,password:$password,court_station:$court_station){
+id
+}
+}`
+
 const courtStations = `
    {
   courtStations{
@@ -123,16 +143,9 @@ signin
 date
 }
 }`
-const registerAdmin = `
-mutation($username:String!,$password:String!){
-registerAdmin(username:$username,password:$password){
-id
-}
-}`
 
 export {
     registerAdvocate,
-    signup,
     isAdvocateExists,
     adminExists,
     advocateLogin,
@@ -147,5 +160,8 @@ export {
     caseCategories,
     formFeeStructures,
     isFormFeeStructureExists,
-    addFormFeeStructure
+    addFormFeeStructure,
+    courtAdminLogin,
+    isCourtAdminExists,
+    registerCourtAdmin
 }

@@ -11,6 +11,9 @@ import AdminDashboard from "./components/admin/AdminDashboard"
 import CourtStations from "./components/admin/courts/CourtStations"
 import CaseCategories from "./components/admin/case-categories/CaseCategories"
 import FormFeeStructures from "./components/admin/form-fee-structure/FormFeeStructures"
+import CourtAdminSignInPage from "./components/court-station-admin/signin/CourtAdminSignInPage"
+import CourtAdminDashboard from "./components/court-station-admin/CourtAdminDashboard"
+import requireCourtAdminAuth from "./components/utils/requireCourtAdminAuth"
 
 export default () => {
 
@@ -26,12 +29,9 @@ export default () => {
                         <Route exact path="/admin/dashboard/court-stations" component={requireAuth(CourtStations)}/>
                         <Route exact path="/admin/dashboard/case-categories" component={requireAuth(CaseCategories)}/>
                         <Route exact path="/admin/dashboard/case-forms" component={requireAuth(FormFeeStructures)}/>
-                        {/*<Route exact path="/guards" component={Home}/>*/}
-                        {/*<Route exact path="/guards/leave" component={Leave}/>*/}
-                        {/*<Route exact path="/guards/inbox" component={InboxPage}/>*/}
-                        {/*<Route exact path="/guards/profile" component={ProfilePage}/>*/}
-                        {/*<Route exact path="/guards/reports" component={Reports}/>*/}
-                        {/*<Route exact path="/guards/attendance" component={AttendanceTable}/>*/}
+                        <Route exact path="/court-admin/signin" component={CourtAdminSignInPage}/>
+                        <Route exact path="/court-admin/dashboard" component={requireCourtAdminAuth(CourtAdminDashboard)}/>
+
                     </Switch>
                 </App>
             </div>

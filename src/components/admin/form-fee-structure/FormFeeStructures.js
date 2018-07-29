@@ -240,8 +240,6 @@ class FormFeeStructures extends React.Component {
                     </div>
                     }
                     {error && <div className="alert alert-dark">An error occurred while fetching forms</div>}
-
-
                 </div>
 
             </div>

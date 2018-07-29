@@ -7,7 +7,7 @@ import {addCaseCategory, caseCategories, isCaseCategoryExists} from "../../../sh
 import PropTypes from 'prop-types'
 import {isEmpty} from "lodash"
 import validator from "validator"
-import TextFieldGroup from '../../../shared/TextFieldsGroup'
+import CustomFieldGroup from "../../../shared/CustomTextFieldGroup"
 
 class CaseCategories extends React.Component {
     constructor(props) {
@@ -182,8 +182,9 @@ class CaseCategories extends React.Component {
                     <br/><br/>
                     {showNewCaseCategoryForm && <div>
                         {message && <div>{message}</div>}
-                        <form onSubmit={this.onSubmit}>
-                            <TextFieldGroup
+                        <form onSubmit={this.onSubmit} className="form-row">
+                            <div className="col-md-9">
+                            <CustomFieldGroup
                                 label="Name"
                                 type="name"
                                 name="name"
@@ -192,12 +193,13 @@ class CaseCategories extends React.Component {
                                 error={errors.name}
                                 checkLocationExists={this.checkCaseCategoryExists}
                             />
-                            <div className="form-group row">
-                                <div className="col-sm-9 offset-sm-3 ">
+                            </div>
+                            <div className="col-md-3 ">
+                            <div className="form-group ">
                                     <button disabled={isLoading || invalid} className="btn btn-dark btn-sm form-control"
                                             type="submit">Save
                                     </button>
-                                </div>
+                            </div>
                             </div>
                         </form>
                     </div>}

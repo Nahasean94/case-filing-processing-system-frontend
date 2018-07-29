@@ -1,6 +1,6 @@
 body {
     font-family: Helvetica, "Helvetica Neue";
-    background-color: whitesmoke;
+
 }
 
 .names {
@@ -41,7 +41,7 @@ body {
 
 .bd-content {
     padding-top: 10px;
-    overflow: hidden;
+    /*overflow: hidden;*/
 }
 
 .sign-in-form {

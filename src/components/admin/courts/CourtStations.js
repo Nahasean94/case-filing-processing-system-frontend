@@ -7,7 +7,8 @@ import {addCourtStation, courtStations, isCourtStationExists} from "../../../sha
 import PropTypes from 'prop-types'
 import {isEmpty} from "lodash"
 import validator from "validator"
-import TextFieldGroup from '../../../shared/TextFieldsGroup'
+import CustomFieldGroup from '../../../shared/CustomTextFieldGroup'
+
 
 class CourtStations extends React.Component {
     constructor(props) {
@@ -107,7 +108,7 @@ class CourtStations extends React.Component {
                             isLoading: false,
                             invalid: false,
                             loading: false,
-                            courtStations:[data.addCourtStation,...this.state.courtStations],
+                            courtStations: [data.addCourtStation, ...this.state.courtStations],
                             message: data.addCourtStation
                                 ? <div className="alert alert-success" role="alert">Successfully added court station
                                     "{data.addCourtStation.name}"
@@ -125,7 +126,6 @@ class CourtStations extends React.Component {
     onChange(e) {
         this.setState({[e.target.name]: e.target.value})
     }
-
 
 
     componentDidMount() {
@@ -168,13 +168,13 @@ class CourtStations extends React.Component {
     }
 
     render() {
-        const {showNewCourtStationForm, courtStations, errors,error, loading, message, isLoading, invalid} = this.state
+        const {showNewCourtStationForm, courtStations, errors, error, loading, message, isLoading, invalid} = this.state
         return (<div className="container">
             <div className="row">
                 <div className="col-sm-3 col-md-3 bd-sidebar">
                     <Menu router={this.context.router} active="court-station"/>
                 </div>
-                <div className="col-sm-8 bd-content">
+                <div className="col-sm-9 bd-content">
                     {!showNewCourtStationForm ?
                         <button className="btn btn-sm btn-success" onClick={this.showNewCourtStationForm}><span><i
                             className="fa fa-plus"></i></span></button> :
@@ -183,18 +183,20 @@ class CourtStations extends React.Component {
                     <br/><br/>
                     {showNewCourtStationForm && <div>
                         {message && <div>{message}</div>}
-                        <form onSubmit={this.onSubmit}>
-                            <TextFieldGroup
-                                label="Name"
-                                type="name"
-                                name="name"
-                                value={this.state.name} autoFocus={true}
-                                onChange={this.onChange}
-                                error={errors.name}
-                                checkLocationExists={this.checkLocationExists}
-                            />
-                            <div className="form-group row">
-                                <div className="col-sm-9 offset-sm-3 ">
+                        <form onSubmit={this.onSubmit} className="form-row">
+                            <div className="col-md-9">
+                                <CustomFieldGroup
+                                    label="Name"
+                                    type="name"
+                                    name="name"
+                                    value={this.state.name} autoFocus={true}
+                                    onChange={this.onChange}
+                                    error={errors.name}
+                                    checkLocationExists={this.checkLocationExists}
+                                />
+                            </div>
+                            <div className="col-md-3">
+                                <div className="form-group ">
                                     <button disabled={isLoading || invalid} className="btn btn-dark btn-sm form-control"
                                             type="submit">Save
                                     </button>
