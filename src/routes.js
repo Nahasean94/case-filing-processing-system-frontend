@@ -9,6 +9,7 @@ import AdvocateDashboard from "./components/advocates/AdvocateDashboard"
 import AdminSignInPage from "./components/admin/signin/AdminSignInPage"
 import AdminDashboard from "./components/admin/AdminDashboard"
 import CourtStations from "./components/admin/courts/CourtStations"
+import CaseCategories from "./components/admin/case-categories/CaseCategories"
 
 export default () => {
 
@@ -22,6 +23,7 @@ export default () => {
                         <Route exact path="/admin/signin" component={AdminSignInPage}/>
                         <Route exact path="/admin/dashboard" component={requireAuth(AdminDashboard)}/>
                         <Route exact path="/admin/dashboard/court-stations" component={requireAuth(CourtStations)}/>
+                        <Route exact path="/admin/dashboard/case-categories" component={requireAuth(CaseCategories)}/>
                         {/*<Route exact path="/guards" component={Home}/>*/}
                         {/*<Route exact path="/guards/leave" component={Leave}/>*/}
                         {/*<Route exact path="/guards/inbox" component={InboxPage}/>*/}

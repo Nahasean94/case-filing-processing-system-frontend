@@ -3,21 +3,29 @@ import {Nav, NavItem, NavLink} from "reactstrap"
 
 
 export default ({router, active}) => {
-    const onGuardsLink = (e) => {
+    const onCaseFormsLink = (e) => {
         e.preventDefault()
-        router.history.push("/admin/guards")
+        router.history.push("/admin/dashboard/case-forms")
     }
-    const onLocationsLink = (e) => {
+    const onCaseCategoriesLink = (e) => {
         e.preventDefault()
-        router.history.push("/admin/locations")
+        router.history.push("/admin/dashboard/case-categories")
     }
     const onCourtStationsLink = (e) => {
         e.preventDefault()
         router.history.push("/admin/dashboard/court-stations")
     }
-    const onAttendanceLink = (e) => {
+    const onCourtAssistantsLink = (e) => {
         e.preventDefault()
-        router.history.push("/admin/attendance")
+        router.history.push("/admin/dashboard/court-assistants")
+    }
+    const onAdvocatesLink = (e) => {
+        e.preventDefault()
+        router.history.push("/admin/dashboard/advocates")
+    }
+    const onDeputyRegistrarsLink = (e) => {
+        e.preventDefault()
+        router.history.push("/admin/dashboard/deputy-registrars")
     }
 
     return <Nav pills vertical  className="bd-links" id="bd-docs-nav">
@@ -25,19 +33,19 @@ export default ({router, active}) => {
             <NavLink href="" onClick={onCourtStationsLink} active={active === 'court-station'}>Court Stations</NavLink>
         </NavItem>
         <NavItem>
-            <NavLink href="" onClick={onGuardsLink} active={active === 'guards'}>Case Forms</NavLink>
+            <NavLink href="" onClick={onCaseFormsLink} active={active === 'case-forms'}>Case Forms</NavLink>
         </NavItem>
         <NavItem>
-            <NavLink href="" onClick={onLocationsLink} active={active === 'locations'}>Case categories</NavLink>
+            <NavLink href="" onClick={onCaseCategoriesLink} active={active === 'case-categories'}>Case categories</NavLink>
         </NavItem>
         <NavItem>
-            <NavLink href="" onClick={onLocationsLink} active={active === 'locations'}>Advocates</NavLink>
+            <NavLink href="" onClick={onAdvocatesLink} active={active === 'advocates'}>Advocates</NavLink>
         </NavItem>
         <NavItem>
-            <NavLink href="" onClick={onAttendanceLink} active={active === 'attendance'}>Court assistants</NavLink>
+            <NavLink href="" onClick={onCourtAssistantsLink} active={active === 'court-assistants'}>Court assistants</NavLink>
         </NavItem>
         <NavItem>
-            <NavLink href="" onClick={onAttendanceLink} active={active === 'attendance'}>Deputy registrars</NavLink>
+            <NavLink href="" onClick={onDeputyRegistrarsLink} active={active === 'deputy-registrars'}>Deputy registrars</NavLink>
         </NavItem>
 
     </Nav>

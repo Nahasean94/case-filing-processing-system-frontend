@@ -44,9 +44,24 @@ const isCourtStationExists = `
   }
 }
 `
+const isCaseCategoryExists= `
+   query($name:String!) {
+  isCaseCategoryExists(name:$name) {
+   exists
+  }
+}
+`
 const addCourtStation = `
    mutation($name:String!) {
   addCourtStation(name:$name) {
+   id
+   name
+  }
+}
+`
+const addCaseCategory = `
+   mutation($name:String!) {
+  addCaseCategory(name:$name) {
    id
    name
   }
@@ -62,6 +77,14 @@ const adminExists = `
 const courtStations = `
    {
   courtStations{
+   id
+   name
+  }
+}
+`
+const caseCategories = `
+   {
+  caseCategories{
    id
    name
   }
@@ -92,6 +115,9 @@ export {
     registerAdmin,
     signin,
     isCourtStationExists,
+    isCaseCategoryExists,
     addCourtStation,
-    courtStations
+    courtStations,
+    addCaseCategory,
+    caseCategories
 }
