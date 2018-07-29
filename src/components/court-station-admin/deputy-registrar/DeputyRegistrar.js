@@ -2,15 +2,15 @@ import React from 'react'
 import Menu from "../Menu"
 import {Consumer} from "graphql-react"
 import {fetchOptionsOverride} from "../../../shared/fetchOverrideOptions"
-import CourtAssistantView from "./CourtAssistantView"
-import {getCourtAssistant, registerCourtAssistant} from "../../../shared/queries"
+import {getDeputyRegistrar, registerDeputyRegistrar} from "../../../shared/queries"
 import PropTypes from 'prop-types'
 import {isEmpty} from "lodash"
 import validator from "validator"
 import * as jwt from "jsonwebtoken"
 import TextFieldGroup from "../../../shared/TextFieldsGroup"
+import DeputyRegistrarView from "./DeputyRegistrarView"
 
-class CourtAssistant extends React.Component {
+class DeputyRegistrar extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -18,8 +18,8 @@ class CourtAssistant extends React.Component {
             username: '',
             password: '',
             passwordConfirmation: '',
-            showNewCourtAssistantForm: false,
-            courtAssistant: '',
+            showNewDeputyRegistrarForm: false,
+            deputyRegistrar: '',
             court_station: jwt.decode(localStorage.getItem('CourtSystem')).court_station,
             error: false,
             errors: {},
@@ -28,8 +28,8 @@ class CourtAssistant extends React.Component {
             loading: false,
             message: ''
         }
-        this.showNewCourtAssistantForm = this.showNewCourtAssistantForm.bind(this)
-        this.closeNewCourtAssistantForm = this.closeNewCourtAssistantForm.bind(this)
+        this.showNewDeputyRegistrarForm = this.showNewDeputyRegistrarForm.bind(this)
+        this.closeNewDeputyRegistrarForm = this.closeNewDeputyRegistrarForm.bind(this)
         this.onChange = this.onChange.bind(this)
         this.onSubmit = this.onSubmit.bind(this)
 
@@ -83,7 +83,7 @@ class CourtAssistant extends React.Component {
                             court_station: this.state.court_station,
 
                         },
-                        query: registerCourtAssistant
+                        query: registerDeputyRegistrar
                     }
                 })
                 .request.then(({data}) => {
@@ -97,13 +97,13 @@ class CourtAssistant extends React.Component {
                             isLoading: false,
                             invalid: false,
                             loading: false,
-                            courtAssistant: data.registerCourtAssistant,
-                            message: data.registerCourtAssistant
+                            deputyRegistrar: data.registerDeputyRegistrar,
+                            message: data.registerDeputyRegistrar
                                 ? <div className="alert alert-success" role="alert">Successfully added
-                                    "{data.registerCourtAssistant.username}"
+                                    "{data.registerDeputyRegistrar.username}"
                                 </div>
-                                : <div className="alert alert-danger" role="alert">An error occurred while adding court
-                                    assistant
+                                : <div className="alert alert-danger" role="alert">An error occurred while adding deputy
+                                    registrar
                                 </div>
                         })
 
@@ -128,13 +128,13 @@ class CourtAssistant extends React.Component {
                         court_station: this.state.court_station,
 
                     },
-                    query: getCourtAssistant
+                    query: getDeputyRegistrar
                 }
             })
             .request.then(({data, loading, error}) => {
             if (data) {
-                if (data.getCourtAssistant) {
-                    this.setState({courtAssistant: data.getCourtAssistant})
+                if (data.getDeputyRegistrar) {
+                    this.setState({deputyRegistrar: data.getDeputyRegistrar})
                 }
             } else if (loading) {
 
@@ -147,33 +147,33 @@ class CourtAssistant extends React.Component {
         })
     }
 
-    showNewCourtAssistantForm() {
-        this.setState({showNewCourtAssistantForm: true})
+    showNewDeputyRegistrarForm() {
+        this.setState({showNewDeputyRegistrarForm: true})
     }
 
-    closeNewCourtAssistantForm() {
-        this.setState({showNewCourtAssistantForm: false})
+    closeNewDeputyRegistrarForm() {
+        this.setState({showNewDeputyRegistrarForm: false})
     }
 
     render() {
-        const {showNewCourtAssistantForm, courtAssistant, errors, error, loading,username,password,passwordConfirmation, message, isLoading, invalid} = this.state
+        const {showNewDeputyRegistrarForm, deputyRegistrar, errors, error, loading, username, password, passwordConfirmation, message, isLoading, invalid} = this.state
         return (<div className="container">
             <div className="row">
                 <div className="col-sm-3 col-md-3 bd-sidebar">
-                    <Menu router={this.context.router} active="court-assistant"/>
+                    <Menu router={this.context.router} active="deputy-registrar"/>
                 </div>
                 <div className="col-sm-8 bd-content">
-                    {!courtAssistant? !showNewCourtAssistantForm?
-                        <button className="btn btn-sm btn-success" onClick={this.showNewCourtAssistantForm}><span><i
+                    {!deputyRegistrar ? !showNewDeputyRegistrarForm ?
+                        <button className="btn btn-sm btn-success" onClick={this.showNewDeputyRegistrarForm}><span><i
                             className="fa fa-plus"></i></span></button> :
-                        <button className="btn btn-sm btn-success" onClick={this.closeNewCourtAssistantForm}><span><i
-                            className="fa fa-angle-double-up"></i></span></button>:''}
+                        <button className="btn btn-sm btn-success" onClick={this.closeNewDeputyRegistrarForm}><span><i
+                            className="fa fa-angle-double-up"></i></span></button> : ''}
                     <br/><br/>
-                    {showNewCourtAssistantForm && !courtAssistant && <div>
+                    {showNewDeputyRegistrarForm && !deputyRegistrar && <div>
                         {message && <div>{message}</div>}
                         <form onSubmit={this.onSubmit}>
                             <div className="row">
-                                <h2 className="offset-sm-4">Create new court assistant account</h2>
+                                <h2 className="offset-sm-4">Create new deputy registrar account</h2>
                             </div>
                             <TextFieldGroup
                                 label="Username"
@@ -212,7 +212,7 @@ class CourtAssistant extends React.Component {
                             </div>
                         </form>
                     </div>}
-                    {courtAssistant ?
+                    {deputyRegistrar ?
                         <table className="table ">
                             <thead>
                             <tr>
@@ -220,17 +220,17 @@ class CourtAssistant extends React.Component {
                             </tr>
                             </thead>
                             <tbody>
-                            <CourtAssistantView courtAssistant={courtAssistant}/>
+                            <DeputyRegistrarView deputyRegistrar={deputyRegistrar}/>
 
                             </tbody>
-                        </table> : <div className="alert alert-dark">No court assistant found</div>}
+                        </table> : <div className="alert alert-dark">No deputy registrar found</div>}
 
                     {loading && <div className="progress">
                         <div className="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
                              aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
                     </div>
                     }
-                    {error && <div className="alert alert-dark">An error occurred while fetching court assistants</div>}
+                    {error && <div className="alert alert-dark">An error occurred while fetching deputy registrar</div>}
 
 
                 </div>
@@ -240,7 +240,7 @@ class CourtAssistant extends React.Component {
     }
 }
 
-CourtAssistant.contextTypes = {
+DeputyRegistrar.contextTypes = {
     router: PropTypes.object.isRequired
 }
-export default () => <Consumer>{graphql => <CourtAssistant graphql={graphql}/>}</Consumer>
+export default () => <Consumer>{graphql => <DeputyRegistrar graphql={graphql}/>}</Consumer>

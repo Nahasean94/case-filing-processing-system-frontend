@@ -101,6 +101,13 @@ const getCourtAssistant = `
    username
   }
 }`
+const getDeputyRegistrar = `
+   query($court_station:ID!){
+  getDeputyRegistrar(court_station:$court_station){
+   id
+   username
+  }
+}`
 const registerCourtAssistant = `
 mutation($username:String!,$password:String!,$court_station:ID!){
 registerCourtAssistant(username:$username,password:$password,court_station:$court_station){
@@ -221,4 +228,5 @@ export {
     isDeputyRegistrarExists,
     registerDeputyRegistrar,
     getCourtAssistant,
+    getDeputyRegistrar
 }

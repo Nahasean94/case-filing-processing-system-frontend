@@ -1,8 +1,8 @@
 import React from 'react'
 
-class CourtAssistantView extends React.Component {
+class DeputyRegistrarView extends React.Component {
     render() {
-        const {username, id} = this.props.courtAssistant
+        const {username, id} = this.props.deputyRegistrar
 
         return (
             <tr>
@@ -12,4 +12,4 @@ class CourtAssistantView extends React.Component {
     }
 }
 
-export default CourtAssistantView
+export default DeputyRegistrarView

@@ -5,7 +5,7 @@ import {Nav, NavItem, NavLink} from "reactstrap"
 export default ({router, active}) => {
     const onCourtAssistantsLink = (e) => {
         e.preventDefault()
-        router.history.push("/court-admin/dashboard/court-assistant")
+        router.history.push("/court-admin/dashboard/assistant")
     }
 
     const onDeputyRegistrarsLink = (e) => {
