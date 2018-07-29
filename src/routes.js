@@ -14,6 +14,7 @@ import FormFeeStructures from "./components/admin/form-fee-structure/FormFeeStru
 import CourtAdminSignInPage from "./components/court-station-admin/signin/CourtAdminSignInPage"
 import CourtAdminDashboard from "./components/court-station-admin/CourtAdminDashboard"
 import requireCourtAdminAuth from "./components/utils/requireCourtAdminAuth"
+import CourtAssistant from "./components/court-station-admin/court-assistant/CourtAssistant"
 
 export default () => {
 
@@ -31,6 +32,8 @@ export default () => {
                         <Route exact path="/admin/dashboard/case-forms" component={requireAuth(FormFeeStructures)}/>
                         <Route exact path="/court-admin/signin" component={CourtAdminSignInPage}/>
                         <Route exact path="/court-admin/dashboard" component={requireCourtAdminAuth(CourtAdminDashboard)}/>
+                        <Route exact path="/court-admin/assistant" component={requireCourtAdminAuth(CourtAssistant)}
+                    />
 
                     </Switch>
                 </App>

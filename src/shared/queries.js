@@ -79,6 +79,56 @@ registerCourtAdmin(username:$username,password:$password,court_station:$court_st
 id
 }
 }`
+const courtAssistantLogin = `
+   mutation($username:String!,$password:String!,$court_station:ID!) {
+  courtAssistantLogin(username:$username,password:$password,court_station:$court_station) {
+    token
+    ok
+    error
+  }
+}
+`
+const isCourtAssistantExists = `
+   query($court_station:ID!){
+  isCourtAssistantExists(court_station:$court_station){
+   exists
+  }
+}`
+const getCourtAssistant = `
+   query($court_station:ID!){
+  getCourtAssistant(court_station:$court_station){
+   id
+   username
+  }
+}`
+const registerCourtAssistant = `
+mutation($username:String!,$password:String!,$court_station:ID!){
+registerCourtAssistant(username:$username,password:$password,court_station:$court_station){
+id
+username
+}
+}`
+const deputyRegistrarLogin = `
+   mutation($username:String!,$password:String!,$court_station:ID!) {
+  deputyRegistrarLogin(username:$username,password:$password,court_station:$court_station) {
+    token
+    ok
+    error
+  }
+}
+`
+const isDeputyRegistrarExists = `
+   query($court_station:ID!){
+  isDeputyRegistrarExists(court_station:$court_station){
+   exists
+  }
+}`
+const registerDeputyRegistrar = `
+mutation($username:String!,$password:String!,$court_station:ID!){
+registerDeputyRegistrar(username:$username,password:$password,court_station:$court_station){
+id
+}
+}`
 
 const courtStations = `
    {
@@ -163,5 +213,12 @@ export {
     addFormFeeStructure,
     courtAdminLogin,
     isCourtAdminExists,
-    registerCourtAdmin
+    registerCourtAdmin,
+    courtAssistantLogin,
+    isCourtAssistantExists,
+    registerCourtAssistant,
+    deputyRegistrarLogin,
+    isDeputyRegistrarExists,
+    registerDeputyRegistrar,
+    getCourtAssistant,
 }

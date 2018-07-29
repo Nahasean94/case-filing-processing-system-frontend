@@ -7,14 +7,19 @@ class Home extends React.Component {
     render() {
         if (localStorage.getItem('CourtSystem')) {
             const token = jwt.decode(localStorage.getItem('CourtSystem'))
-            if (token.role = 'system') {
+            console.log(token)
+            if (token.role=== 'system') {
                 this.context.router.history.push('/admin/dashboard')
 
-            } else if (token.role = 'advocate') {
+            } else if (token.role === 'advocate') {
                 this.context.router.history.push('/advocates/dashboard')
             }
-            else if (token.role = 'assitant') {
+            else if (token.role === 'assitant') {
                 this.context.router.history.push('/assitant/dashboard')
+
+            } else if (token.role === 'court-admin') {
+                this.context.router.history.push('/court-admin/dashboard')
+
 
             }
 
