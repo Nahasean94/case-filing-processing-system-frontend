@@ -1,11 +1,11 @@
 import React, {Component} from 'react'
 import PropTypes from 'prop-types'
-import TextFieldGroup from "../../../../shared/TextFieldsGroup"
+import TextFieldGroup from "../../../shared/TextFieldsGroup"
 import validator from 'validator'
 import {isEmpty} from 'lodash'
-import {fetchOptionsOverride} from "../../../../shared/fetchOverrideOptions"
-import {isAdvocateExists, registerAdvocate} from '../../../../shared/queries'
-import {Query} from "graphql-react"
+import {fetchOptionsOverride} from "../../../shared/fetchOverrideOptions"
+import {isAdvocateExists, registerAdvocate} from '../../../shared/queries'
+import {Consumer} from "graphql-react"
 
 
 class SignupForm extends Component {
@@ -55,8 +55,8 @@ class SignupForm extends Component {
                             errors.practice_number = 'An advocate with that practice number already exists'
                             this.setState({errors})
                         }
-                        else{
-                            this.setState({errors:{}})
+                        else {
+                            this.setState({errors: {}})
                         }
                     }
                 }
@@ -151,10 +151,9 @@ class SignupForm extends Component {
                             cellphone: '',
                             isLoading: false,
                             invalid: false,
-                            message: data.registerAdvocate
-                                ? this.setState({message: 'Account details successfully saved. Use the login form to login'})
-                                : this.setState({message: 'Registration Failed'})
+
                         })
+                        this.props.createdAccount()
 
                     }
                 }
@@ -176,6 +175,7 @@ class SignupForm extends Component {
 
             <form onSubmit={this.onSubmit}>
                 {message && <div className="alert alert-success">{message}</div>}
+                <h1>Create advocate account</h1>
                 <TextFieldGroup
                     label="Practice Number"
                     type="number"
@@ -273,7 +273,7 @@ class SignupForm extends Component {
                     </div>
                 </div>
                 <div className="form-group row">
-                    <div className="col-sm-4 offset-sm-8">
+                    <div className="col-sm-9 offset-sm-3">
                         <button disabled={isLoading || invalid}
                                 className="btn btn-dark btn-sm form-control"
                                 onClick={this.forwardToContactDetails}>Sign up
@@ -289,4 +289,5 @@ SignupForm.contextTypes = {
     router: PropTypes.object.isRequired
 }
 
-export default SignupForm
+export default ({createdAccount}) => <Consumer>{graphql => <SignupForm createdAccount={createdAccount}
+                                                                       graphql={graphql}/>}</Consumer>

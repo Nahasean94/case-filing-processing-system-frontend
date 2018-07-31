@@ -2,11 +2,12 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import validator from 'validator'
 import {isEmpty} from 'lodash'
-import TextFieldGroup from '../../../../shared/TextFieldsGroup'
-import {setLoginToken} from "../../../../actions/advocateLoginActions"
+import TextFieldGroup from '../../../shared/TextFieldsGroup'
+import {setLoginToken} from "../../../actions/advocateLoginActions"
 import {connect} from 'react-redux'
-import {fetchOptionsOverride} from "../../../../shared/fetchOverrideOptions"
-import {advocateLogin} from '../../../../shared/queries'
+import {fetchOptionsOverride} from "../../../shared/fetchOverrideOptions"
+import {advocateLogin} from '../../../shared/queries'
+import {Consumer} from "graphql-react"
 
 class LoginForm extends React.Component {
     constructor(props) {
@@ -132,5 +133,6 @@ LoginForm.propTypes = {
 LoginForm.contextTypes = {
     router: PropTypes.object.isRequired
 }
-
-export default connect(null, {setLoginToken})(LoginForm)
+const exportAdvocateLoginForm = ({setLoginToken}) => <Consumer>{graphql => <LoginForm setLoginToken={setLoginToken}
+                                                                                      graphql={graphql}/>}</Consumer>
+export default connect(null, {setLoginToken})(exportAdvocateLoginForm)

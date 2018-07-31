@@ -14,8 +14,8 @@ class Home extends React.Component {
             } else if (token.role === 'advocate') {
                 this.context.router.history.push('/advocates/dashboard')
             }
-            else if (token.role === 'assitant') {
-                this.context.router.history.push('/assitant/dashboard')
+            else if (token.role === 'assistant') {
+                this.context.router.history.push('/assistant/dashboard')
 
             } else if (token.role === 'court-admin') {
                 this.context.router.history.push('/court-admin/dashboard')
