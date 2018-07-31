@@ -22,6 +22,12 @@ import CourtAssistantDashboard from "./components/court-assistant/CourtAssistant
 import DeputyRegistrarLogin from "./components/deputy-registrar/DeputyRegistrarLogin"
 import DeputyRegistrarDashboard from "./components/deputy-registrar/DeputyRegistrarDashboard"
 import requireDeputyRegistrarAuth from "./components/utils/requireDeputyRegistrarAuth"
+import NewCase from "./components/advocates/cases/NewCase"
+import PendingCases from "./components/advocates/cases/PendingCases"
+import CompletedCases from "./components/advocates/cases/CompletedCases"
+import ServedCases from "./components/advocates/cases/ServedCases"
+import Clientele from "./components/advocates/clientele/Clientele"
+import Profile from "./components/advocates/profile/Profile"
 
 export default () => {
 
@@ -38,18 +44,38 @@ export default () => {
                         <Route exact path="/admin/dashboard/case-categories" component={requireAuth(CaseCategories)}/>
                         <Route exact path="/admin/dashboard/case-forms" component={requireAuth(FormFeeStructures)}/>
                         <Route exact path="/court-admin/signin" component={CourtAdminSignInPage}/>
-                        <Route exact path="/court-admin/dashboard" component={requireCourtAdminAuth(CourtAdminDashboard)}/>
-                        <Route exact path="/court-admin/dashboard/assistant" component={requireCourtAdminAuth(CourtAssistant)}/>
-                        <Route exact path="/court-admin/dashboard/deputy-registrar" component={requireCourtAdminAuth(DeputyRegistrar)}/>
+                        <Route exact path="/court-admin/dashboard"
+                               component={requireCourtAdminAuth(CourtAdminDashboard)}/>
+                        <Route exact path="/court-admin/dashboard/assistant"
+                               component={requireCourtAdminAuth(CourtAssistant)}/>
+                        <Route exact path="/court-admin/dashboard/deputy-registrar"
+                               component={requireCourtAdminAuth(DeputyRegistrar)}/>
                         <Route exact path="/assistant/signin" component={CourtAssistantLogin}
-                    />
-                        <Route exact path="/assistant/dashboard" component={requireAssistantAuth(CourtAssistantDashboard)}
-                    />
-                        <Route exact path="/deputy-registrar/dashboard" component={requireDeputyRegistrarAuth(DeputyRegistrarDashboard)}
-                    />
+                        />
+                        <Route exact path="/assistant/dashboard"
+                               component={requireAssistantAuth(CourtAssistantDashboard)}
+                        />
+                        <Route exact path="/deputy-registrar/dashboard"
+                               component={requireDeputyRegistrarAuth(DeputyRegistrarDashboard)}
+                        />
                         <Route exact path="/deputy-registrar/signin" component={DeputyRegistrarLogin}
-                    />
-
+                        />
+                        <Route exact path="/advocates/dashboard" component={requireAdvocateAuth(AdminDashboard)}
+                        />
+                        <Route exact path="/advocates/dashboard/new-case" component={requireAdvocateAuth(NewCase)}/>
+                        <Route exact path="/advocates/dashboard/pending-cases"
+                               component={requireAdvocateAuth(PendingCases)}
+                        />
+                        <Route exact path="/advocates/dashboard/completed-cases"
+                               component={requireAdvocateAuth(CompletedCases)}
+                        />
+                        <Route exact path="/advocates/dashboard/served-cases"
+                               component={requireAdvocateAuth(ServedCases)}
+                        />
+                        <Route exact path="/advocates/dashboard/clientele" component={requireAdvocateAuth(Clientele)}
+                        />
+                        <Route exact path="/advocates/dashboard/profile" component={requireAdvocateAuth(Profile)}
+                        />
                     </Switch>
                 </App>
             </div>

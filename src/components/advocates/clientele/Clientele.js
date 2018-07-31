@@ -1,16 +1,16 @@
 import React from 'react'
-import Menu from "./Menu"
+import Menu from "../Menu"
 import PropTypes from "prop-types"
 
-class AdvocateDashboard extends React.Component {
+class Clientele extends React.Component {
     render() {
         return (<div className="container">
             <div className="row">
                 <div className="col-sm- col-md-2 bd-sidebar">
-                    <Menu router={this.context.router} active="dashboard"/>
+                    <Menu router={this.context.router} active="clientele"/>
                 </div>
                 <div className="col-sm-6 col-md-6 col-xl-6 offset-sm-2 bd-content">
-                    hola
+                    Clientele
                 </div>
             </div>
 
@@ -18,7 +18,8 @@ class AdvocateDashboard extends React.Component {
     }
 }
 
-AdvocateDashboard.contextTypes = {
+Clientele.contextTypes = {
     router: PropTypes.object.isRequired
 }
-export default AdvocateDashboard
+
+export default Clientele
