@@ -28,6 +28,7 @@ import CompletedCases from "./components/advocates/cases/CompletedCases"
 import ServedCases from "./components/advocates/cases/ServedCases"
 import Clientele from "./components/advocates/clientele/Clientele"
 import Profile from "./components/advocates/profile/Profile"
+import CaseTypes from "./components/admin/case-type/CaseTypes"
 
 export default () => {
 
@@ -38,10 +39,11 @@ export default () => {
                         <Route exact path="/" component={Home}/>
                         <Route exact path="/advocates/signin" component={AdvocatesSignInPage}/>
                         <Route exact path="/advocates/dashboard" component={requireAdvocateAuth(AdvocateDashboard)}/>
-                        <Route exact path="/admin/signin" component={AdminSignInPage}/>
+                        <Route exact path="/admin" component={AdminSignInPage}/>
                         <Route exact path="/admin/dashboard" component={requireAuth(AdminDashboard)}/>
                         <Route exact path="/admin/dashboard/court-stations" component={requireAuth(CourtStations)}/>
                         <Route exact path="/admin/dashboard/case-categories" component={requireAuth(CaseCategories)}/>
+                        <Route exact path="/admin/dashboard/case-types" component={requireAuth(CaseTypes)}/>
                         <Route exact path="/admin/dashboard/case-forms" component={requireAuth(FormFeeStructures)}/>
                         <Route exact path="/court-admin/signin" component={CourtAdminSignInPage}/>
                         <Route exact path="/court-admin/dashboard"

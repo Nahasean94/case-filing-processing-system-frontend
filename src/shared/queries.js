@@ -153,6 +153,14 @@ const caseCategories = `
   }
 }
 `
+const caseTypes= `
+   {
+  caseTypes{
+   id
+   name
+  }
+}
+`
 const isCaseCategoryExists = `
    query($name:String!) {
   isCaseCategoryExists(name:$name) {
@@ -160,9 +168,23 @@ const isCaseCategoryExists = `
   }
 }
 `
+const isCaseTypeExists = `
+   query($name:String!) {
+  isCaseTypeExists(name:$name) {
+   exists
+  }
+}
+`
 const addCaseCategory = `
    mutation($name:String!) {
   addCaseCategory(name:$name) {
+   id
+   name
+  }
+}`
+const addCaseType= `
+   mutation($name:String!) {
+  addCaseType(name:$name) {
    id
    name
   }
@@ -211,10 +233,13 @@ export {
     signin,
     isCourtStationExists,
     isCaseCategoryExists,
+    isCaseTypeExists,
     addCourtStation,
     courtStations,
     addCaseCategory,
+    addCaseType,
     caseCategories,
+    caseTypes,
     formFeeStructures,
     isFormFeeStructureExists,
     addFormFeeStructure,

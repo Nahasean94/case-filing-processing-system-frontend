@@ -11,6 +11,11 @@ export default ({router, active}) => {
         e.preventDefault()
         router.history.push("/admin/dashboard/case-categories")
     }
+    const onCaseTypeLink= (e) => {
+        e.preventDefault()
+        router.history.push("/admin/dashboard/case-types")
+
+    }
     const onCourtStationsLink = (e) => {
         e.preventDefault()
         router.history.push("/admin/dashboard/court-stations")
@@ -37,6 +42,9 @@ export default ({router, active}) => {
         </NavItem>
         <NavItem>
             <NavLink href="" onClick={onCaseCategoriesLink} active={active === 'case-categories'}>Case categories</NavLink>
+        </NavItem>
+        <NavItem>
+            <NavLink href="" onClick={onCaseTypeLink} active={active === 'case-types'}>Case types</NavLink>
         </NavItem>
         <NavItem>
             <NavLink href="" onClick={onAdvocatesLink} active={active === 'advocates'}>Advocates</NavLink>

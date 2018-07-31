@@ -1,8 +1,8 @@
 import React from 'react'
 
-class CaseCategoryView extends React.Component {
+class CaseTypeView extends React.Component {
     render() {
-        const {name, id} = this.props.category
+        const {name, id} = this.props.type
 
         return (
             <tr>
@@ -12,4 +12,4 @@ class CaseCategoryView extends React.Component {
     }
 }
 
-export default CaseCategoryView
+export default CaseTypeView
