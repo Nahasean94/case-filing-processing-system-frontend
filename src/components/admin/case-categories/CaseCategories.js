@@ -32,31 +32,33 @@ class CaseCategories extends React.Component {
         this.checkCaseCategoryExists = this.checkCaseCategoryExists.bind(this)
     }
 
-    checkCaseCategoryExists() {
-        this.props.graphql
-            .query({
-                fetchOptionsOverride: fetchOptionsOverride,
-                resetOnLoad: true,
-                operation: {
-                    variables: {
-                        name: this.state.name,
-                    },
-                    query: isCaseCategoryExists
+    checkCaseCategoryExists(e) {
+        if (e.keyCode !== 13) {
+            this.props.graphql
+                .query({
+                    fetchOptionsOverride: fetchOptionsOverride,
+                    resetOnLoad: true,
+                    operation: {
+                        variables: {
+                            name: this.state.name,
+                        },
+                        query: isCaseCategoryExists
+                    }
+                })
+                .request.then(({data}) => {
+
+                if (data) {
+                    if (data.isCaseCategoryExists.exists) {
+                        let errors = {}
+                        errors.name = 'A case category with that name already exists'
+                        this.setState({errors, invalid: true,})
+                    } else {
+                        let errors = {}
+                        this.setState({errors, invalid: false,})
+                    }
                 }
             })
-            .request.then(({data}) => {
-
-            if (data) {
-                if (data.isCaseCategoryExists.exists) {
-                    let errors = {}
-                    errors.name = 'A case category with that name already exists'
-                    this.setState({errors, invalid: true,})
-                } else {
-                    let errors = {}
-                    this.setState({errors, invalid: false,})
-                }
-            }
-        })
+        }
 
     }
 

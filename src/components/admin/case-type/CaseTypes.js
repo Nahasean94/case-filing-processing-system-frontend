@@ -32,31 +32,33 @@ class CaseTypes extends React.Component {
         this.checkCaseTypeExists = this.checkCaseTypeExists.bind(this)
     }
 
-    checkCaseTypeExists() {
-        this.props.graphql
-            .query({
-                fetchOptionsOverride: fetchOptionsOverride,
-                resetOnLoad: true,
-                operation: {
-                    variables: {
-                        name: this.state.name,
-                    },
-                    query: isCaseTypeExists
+    checkCaseTypeExists(e) {
+        if (e.keyCode !== 13) {
+            this.props.graphql
+                .query({
+                    fetchOptionsOverride: fetchOptionsOverride,
+                    resetOnLoad: true,
+                    operation: {
+                        variables: {
+                            name: this.state.name,
+                        },
+                        query: isCaseTypeExists
+                    }
+                })
+                .request.then(({data}) => {
+
+                if (data) {
+                    if (data.isCaseTypeExists.exists) {
+                        let errors = {}
+                        errors.name = 'A caset type with that name already exists'
+                        this.setState({errors, invalid: true,})
+                    } else {
+                        let errors = {}
+                        this.setState({errors, invalid: false,})
+                    }
                 }
             })
-            .request.then(({data}) => {
-
-            if (data) {
-                if (data.isCaseTypeExists.exists) {
-                    let errors = {}
-                    errors.name = 'A caset type with that name already exists'
-                    this.setState({errors, invalid: true,})
-                } else {
-                    let errors = {}
-                    this.setState({errors, invalid: false,})
-                }
-            }
-        })
+        }
 
     }
 

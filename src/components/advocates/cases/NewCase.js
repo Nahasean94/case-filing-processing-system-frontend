@@ -2,6 +2,7 @@ import React from 'react'
 import Menu from "../Menu"
 import PropTypes from "prop-types"
 import {Progress} from 'reactstrap'
+import CaseType from "./new-case-forms/CaseType"
 
 
 class NewCase extends React.Component {
@@ -10,32 +11,125 @@ class NewCase extends React.Component {
         this.state = {
             progress: 0,
             step: 1,
-            case_type:{},
-            case_description:{}
+            case_type: {
+                court_station: '',
+                case_category: '',
+                case_type: '',
+            },
+            case_description: {
+                title: '',
+                description: ''
+            },
+            plaintiff: {
+                type: 'individual',
+                individual: {
+                    names: '',
+                    email: '',
+                    gender: '',
+                    cellphone: '',
+                    location: '',
+                },
+                organization: {
+                    name: '',
+                    email: '',
+                    cellphone: '',
+                    location: '',
+                    postal_address: '',
+                }
+            },
+            defendant: {
+                type: 'individual',
+                individual: {
+                    names: '',
+                    gender: '',
+                    cellphone: '',
+                    location: '',
+                },
+                organization: {
+                    name: '',
+                    cellphone: '',
+                    location: '',
+                    postal_address: '',
+                }
+            },
+            confirm: false,
+            view: 'case-type'
+
         }
-        this.makeProgress = this.makeProgress.bind(this)
+
+        this.toCaseType = this.toCaseType.bind(this)
+        this.toCaseDescription = this.toCaseDescription.bind(this)
+        this.toPlaintiff = this.toPlaintiff.bind(this)
+        this.toDefendant = this.toDefendant.bind(this)
+        this.toConfirm = this.toConfirm.bind(this)
     }
 
-    makeProgress() {
-        if (this.state.progress < 100) {
-
-            this.setState({progress: this.state.progress + 10, step: this.state.step + 1})
-        }
+    toCaseType() {
+        this.setState({progress: 0, step: 1, view: 'case-type'})
     }
+
+    toCaseDescription() {
+        this.setState({progress: 25, step: 2, view: 'case-description'})
+    }
+
+    toPlaintiff() {
+        this.setState({progress: 50, step: 3, view: 'plaintiff'})
+    }
+
+    toDefendant() {
+        this.setState({progress: 75, step: 4, view: 'defendant'})
+    }
+
+    toConfirm() {
+        this.setState({progress: 100, step: 5, view: 'confirm'})
+    }
+
 
     render() {
+        const {progress, step, case_type, case_description, plaintiff, defendant, confirm, view,} = this.state
         return (<div className="container">
             <div className="row">
                 <div className="col-sm- col-md-2 bd-sidebar">
                     <Menu router={this.context.router} active="new-case"/>
                 </div>
                 <div className="col-sm-8 col-md-8 col-xl-8 bd-content">
-                    <div className="text-center">{this.state.step} of 11</div>
+                    <div className="text-center">Step {this.state.step} of 5</div>
                     <Progress color="success" value={this.state.progress}/>
                     <br/>
-                    <button className="btn btn-primary" onClick={this.makeProgress}>make progress</button>
-                    <br/>
-                    New Cases
+                    {view === 'case-type' && <div>
+                        <h5>Case options</h5>
+                        <CaseType/>
+
+                    </div>}
+                    {view === 'case-description' && <div>Case Description
+                        <br/>
+                        <button className="btn btn-primary" onClick={this.toCaseType}>Back</button>
+                        <br/>
+                        <button className="btn btn-primary" onClick={this.toPlaintiff}>Next</button>
+
+                    </div>}
+                    {view === 'plaintiff' && <div>Plaintiff
+                        <br/>
+                        <button className="btn btn-primary" onClick={this.toCaseDescription}>Back</button>
+                        <br/>
+                        <button className="btn btn-primary" onClick={this.toDefendant}>Next</button>
+
+                    </div>}
+                    {view === 'defendant' && <div>Defendant
+                        <br/>
+                        <button className="btn btn-primary" onClick={this.toPlaintiff}>Back</button>
+                        <br/>
+                        <button className="btn btn-primary" onClick={this.toConfirm}>Next</button>
+
+                    </div>}
+                    {view === 'confirm' && <div>Confirm
+                        <br/>
+                        <button className="btn btn-primary" onClick={this.toDefendant}>Back</button>
+                        <br/>
+                        <button className="btn btn-primary">Next</button>
+
+                    </div>}
+
                 </div>
             </div>
 

@@ -33,32 +33,34 @@ class CourtStations extends React.Component {
         this.checkLocationExists = this.checkLocationExists.bind(this)
     }
 
-    checkLocationExists() {
-        this.props.graphql
-            .query({
-                fetchOptionsOverride: fetchOptionsOverride,
-                resetOnLoad: true,
-                operation: {
-                    variables: {
-                        name: this.state.name,
-                    },
-                    query: isCourtStationExists
+    checkLocationExists(e) {
+        if (e.keyCode !== 13) {
+            this.props.graphql
+                .query({
+                    fetchOptionsOverride: fetchOptionsOverride,
+                    resetOnLoad: true,
+                    operation: {
+                        variables: {
+                            name: this.state.name,
+                        },
+                        query: isCourtStationExists
+                    }
+                })
+                .request.then(({data}) => {
+
+                if (data) {
+                    if (data.isCourtStationExists.exists) {
+                        let errors = {}
+                        errors.name = 'A location with that name already exists'
+                        this.setState({errors, invalid: true,})
+                    } else {
+                        let errors = {}
+                        this.setState({errors, invalid: false,})
+                    }
                 }
             })
-            .request.then(({data}) => {
 
-            if (data) {
-                if (data.isCourtStationExists.exists) {
-                    let errors = {}
-                    errors.name = 'A location with that name already exists'
-                    this.setState({errors, invalid: true,})
-                } else {
-                    let errors = {}
-                    this.setState({errors, invalid: false,})
-                }
-            }
-        })
-
+        }
     }
 
 
@@ -141,8 +143,6 @@ class CourtStations extends React.Component {
             if (data) {
                 if (data.courtStations.length > 0) {
                     this.setState({courtStations: data.courtStations})
-                } else {
-                    this.setState({message: 'No court stations found'})
                 }
             } else if (loading) {
 
