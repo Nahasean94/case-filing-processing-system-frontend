@@ -3,6 +3,8 @@ import Menu from "../Menu"
 import PropTypes from "prop-types"
 import {Progress} from 'reactstrap'
 import CaseType from "./new-case-forms/CaseType"
+import CaseDescription from "./new-case-forms/CaseDescription"
+import Plaintiff from "./new-case-forms/Plaintiff"
 
 
 class NewCase extends React.Component {
@@ -98,18 +100,14 @@ class NewCase extends React.Component {
                     <br/>
                     {view === 'case-type' && <div>
                         <h5>Case options</h5>
-                        <CaseType/>
+                        <CaseType toCaseDescription={this.toCaseDescription}/>
 
                     </div>}
-                    {view === 'case-description' && <div>Case Description
-                        <br/>
-                        <button className="btn btn-primary" onClick={this.toCaseType}>Back</button>
-                        <br/>
-                        <button className="btn btn-primary" onClick={this.toPlaintiff}>Next</button>
-
-                    </div>}
+                    {view === 'case-description' &&
+                        <CaseDescription toCaseType={this.toCaseType} toPlaintiff={this.toPlaintiff}/>
+}
                     {view === 'plaintiff' && <div>Plaintiff
-                        <br/>
+                        <Plaintiff/>
                         <button className="btn btn-primary" onClick={this.toCaseDescription}>Back</button>
                         <br/>
                         <button className="btn btn-primary" onClick={this.toDefendant}>Next</button>

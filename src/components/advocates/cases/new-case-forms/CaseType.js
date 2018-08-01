@@ -3,6 +3,7 @@ import {fetchOptionsOverride} from "../../../../shared/fetchOverrideOptions"
 import {caseCategories, caseTypes, courtStations} from "../../../../shared/queries"
 import {Query} from "graphql-react"
 import Select from 'react-select'
+import {isEmpty} from "lodash"
 
 let courtStationOptions, caseTypeOptions, caseCategoryOptions
 
@@ -33,23 +34,38 @@ class CaseType extends React.Component {
         this.setState({case_category: category})
     }
 
-    onSubmit(e) {
-        e.preventDefault()
+    validateInput(data) {
         let errors = {}
-        if (!this.state.case_category.value) {
+
+        if (!data.case_category.value) {
             errors.case_category = 'This field is required'
         }
-        if (!this.state.case_type.value) {
-
+        if (!data.case_type.value) {
             errors.case_type = 'This field is required'
-
         }
-        if (!this.state.court_station.value) {
-
+        if (!data.court_station.value) {
             errors.court_station = 'This field is required'
         }
+        return {
+            errors,
+            isValid: isEmpty(errors)
+        }
+    }
 
-        this.setState({errors})
+    isValid() {
+        const {errors, isValid} = this.validateInput(this.state)
+        if (!isValid) {
+            this.setState({errors})
+        }
+        return isValid
+    }
+
+    onSubmit(e) {
+        e.preventDefault()
+        // if (this.isValid()) {
+            this.setState({errors: {}})
+            this.props.toCaseDescription()
+        // }
     }
 
     render() {
@@ -91,9 +107,9 @@ class CaseType extends React.Component {
                                 }
                                 }
                             </Query>
-                            {errors && <div className="alert alert-danger">
+                            {errors ? errors.court_station && <div className="alert alert-danger">
                                 {errors.court_station}
-                            </div>}
+                            </div> : ''}
                         </div>
                     </div>
                     <div className="form-group row">
@@ -129,9 +145,9 @@ class CaseType extends React.Component {
                                 }
                                 }
                             </Query>
-                            {errors && <div className="alert alert-danger">
+                            {errors ? errors.case_category && <div className="alert alert-danger">
                                 {errors.case_category}
-                            </div>}
+                            </div> : ''}
                         </div>
                     </div>
                     <div className="form-group row">
@@ -166,9 +182,9 @@ class CaseType extends React.Component {
                                 }
                                 }
                             </Query>
-                            {errors && <div className="alert alert-danger">
+                            {errors ? errors.case_type && <div className="alert alert-danger">
                                 {errors.case_type}
-                            </div>}
+                            </div> :''}
                         </div>
                     </div>
                     <div className="form-group row">
