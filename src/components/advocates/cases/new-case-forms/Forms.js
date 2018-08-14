@@ -17,7 +17,7 @@ class Forms extends Component {
         }
         if (localStorage.getItem("Forms")) {
             const forms = JSON.parse(localStorage.getItem("Forms"))
-            console.log(forms)
+            this.props.clearFacts()
             forms.facts.map(fact => this.props.addFact(fact))
         }
 

@@ -1,12 +1,18 @@
 import React from 'react'
-import Individual from "./plaintiff/Individual"
-import Organization from "./plaintiff/Organizations"
+import Individual from "./defendant/Individual"
+import Organization from "./defendant/Organizations"
 
 class Plaintiff extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            view: ''
+            view: 'individual'
+        }
+        if (localStorage.getItem("Defendant")) {
+            const defendant = JSON.parse(localStorage.getItem("Defendant"))
+            if (defendant.view === 'organization') {
+                this.state.view = 'organization'
+            }
         }
         this.handlePlaintiffChange = this.handlePlaintiffChange.bind(this)
     }
@@ -36,24 +42,9 @@ class Plaintiff extends React.Component {
                                id="organization" checked={view === 'organization'}/>
                         <label className="form-check-label" htmlFor="organization">Organization</label>
                     </div>
-                    {view === 'individual' && <Individual/>}
-                    {view === 'organization' && <Organization/>}
-                    <div className="form-group row">
-                        <div className="col-sm-4 offset-sm-3">
-                            <button className="form-control btn btn-success btn-sm"
-                                    onClick={this.props.toPlaintiff}>Back
-                            </button>
-                        </div>
-                        <div className="col-sm-4 offset-sm-1">
-                            <button className="form-control btn btn-dark btn-sm"
-                                    onClick={this.props.toForms}>Next
-                            </button>
-                        </div>
-                        {/*<div className="col-sm-4  offset-sm-1">*/}
-                        {/*<input type="submit" value="Next" className="form-control btn btn-dark btn-sm "/>*/}
-                        {/*</div>*/}
+                    {view === 'individual' && <Individual toPlaintiff={this.props.toPlaintiff} toForms={this.props.toForms}/>}
+                    {view === 'organization' && <Organization toPlaintiff={this.props.toPlaintiff} toForms={this.props.toForms}/>}
 
-                    </div>
                 </fieldset>
             </form>
         </div>)

@@ -4,14 +4,14 @@ import TextFieldGroup from "../../../../../shared/TextFieldsGroup"
 import validator from 'validator'
 import {isEmpty} from 'lodash'
 import {fetchOptionsOverride} from "../../../../../shared/fetchOverrideOptions"
-import {isAdvocateExists, registerAdvocate} from '../../../../../shared/queries'
-import {Consumer} from "graphql-react"
+import {isAdvocateExists} from '../../../../../shared/queries'
 
 
 class Individual extends Component {
     constructor(props) {
         super(props)
         this.state = {
+            type: 'individual',
             names: '',
             gender: '',
             cellphone: '',
@@ -25,10 +25,18 @@ class Individual extends Component {
         this.onSubmit = this.onSubmit.bind(this)
         this.checkAdvocateExists = this.checkAdvocateExists.bind(this)
 
+        if (localStorage.getItem("Defendant")) {
+            let individual = JSON.parse(localStorage.getItem("Defendant")).defendant
+            if (individual.type === 'individual') {
+                this.state.names = individual.names
+                this.state.cellphone = individual.cellphone
+                this.state.location = individual.location
+                this.state.postal_address = individual.postal_address
+            }
+        }
     }
 
     checkAdvocateExists(e) {
-        console.log("checking")
         if (this.state.practice_number) {
             this.props.graphql
                 .query({
@@ -90,10 +98,21 @@ class Individual extends Component {
 
     onSubmit(e) {
         e.preventDefault()
-        if (this.isInfoValid()) {
-            this.setState({errors: {}, isLoading: true})
-
+        // if (this.isInfoValid()) {
+        const defendant = {
+            type: this.state.type,
+            names: this.state.names,
+            cellphone: this.state.cellphone,
+            location: this.state.location,
+            postal_address: this.state.postal_address,
         }
+        localStorage.setItem("Defendant", JSON.stringify({view: 'individual', defendant: defendant}))
+        localStorage.setItem("view", "defendant")
+
+        this.setState({errors: {}, isLoading: true})
+        this.props.toForms()
+
+        // }
     }
 
     onChange(e) {
@@ -103,7 +122,7 @@ class Individual extends Component {
     render() {
 
         const {
-            errors, isLoading, invalid, practice_number, names, first_name, location, dob, gender, password, passwordConfirmation, message, email, cellphone
+            errors, isLoading, invalid, practice_number, names, first_name, location, dob, gender, password, passwordConfirmation, message, postal_address, cellphone
         } = this.state
 
         return (
@@ -131,21 +150,12 @@ class Individual extends Component {
                 />
 
                 <TextFieldGroup
-                    label="Date of birth"
-                    type="date"
-                    name="dob"
-                    value={dob}
+                    label="Postal address"
+                    type="text"
+                    name="postal_address"
+                    value={postal_address}
                     onChange={this.onChange}
-                    error={errors.dob}
-                />
-
-                <TextFieldGroup
-                    label="Email"
-                    type="email"
-                    name="email"
-                    value={email}
-                    onChange={this.onChange}
-                    error={errors.email}
+                    error={errors.postal_address}
                 />
                 <TextFieldGroup
                     label="Phone number"
@@ -158,25 +168,17 @@ class Individual extends Component {
                 />
 
                 <div className="form-group row">
-                    <label className="col-sm-3 col-form-label" htmlFor="gender">Gender</label>
-                    <div className="col-sm-9">
-                        <select className="form-control form-control-sm" id="gender" name="gender"
-                                required="true" value={gender} onChange={this.onChange}>
-                            <option>Select</option>
-                            <option value="male">Male</option>
-                            <option value="female">Female</option>
-                        </select>
-                        {errors.gender && <div className="invalid-feedback">{errors.gender}</div>}
+                    <div className="col-sm-4 offset-sm-3">
+                        <button className="form-control btn btn-success btn-sm"
+                                onClick={this.props.toPlaintiff}>Back
+                        </button>
+                    </div>
+                    <div className="col-sm-4 offset-sm-1">
+                        <button className="form-control btn btn-dark btn-sm"
+                                onClick={this.onSubmit}>Next
+                        </button>
                     </div>
                 </div>
-                {/*<div className="form-group row">*/}
-                    {/*<div className="col-sm-9 offset-sm-3">*/}
-                        {/*<button disabled={isLoading || invalid}*/}
-                                {/*className="btn btn-dark btn-sm form-control"*/}
-                                {/*onClick={this.forwardToContactDetails}>Sign up*/}
-                        {/*</button>*/}
-                    {/*</div>*/}
-                {/*</div>*/}
             </form>
         )
     }
