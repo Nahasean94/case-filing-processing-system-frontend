@@ -1,10 +1,10 @@
 import React, {Component} from 'react'
 import PropTypes from 'prop-types'
-import TextFieldGroup from "../../../../shared/TextFieldsGroup"
+import TextFieldGroup from "../../../../../shared/TextFieldsGroup"
 import validator from 'validator'
 import {isEmpty} from 'lodash'
-import {fetchOptionsOverride} from "../../../../shared/fetchOverrideOptions"
-import {isAdvocateExists, registerAdvocate} from '../../../../shared/queries'
+import {fetchOptionsOverride} from "../../../../../shared/fetchOverrideOptions"
+import {isAdvocateExists, registerAdvocate} from '../../../../../shared/queries'
 import {Consumer} from "graphql-react"
 
 
@@ -113,7 +113,7 @@ class Individual extends Component {
 
             <form onSubmit={this.onSubmit}>
                 {message && <div className="alert alert-success">{message}</div>}
-                <h1>Add details of the plaintiff</h1>
+
 
                 <TextFieldGroup
                     label="Names"

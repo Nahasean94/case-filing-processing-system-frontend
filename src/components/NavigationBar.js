@@ -45,7 +45,7 @@ class NavigationBar extends React.Component {
         </div>)
 
         return (
-            <nav className="navbar navbar-expand-sm bg-dark-green fixed-top">
+            <nav className="navbar navbar-expand-sm bg-dark-green fixed-top bar">
                 <Link className="navbar-brand" to="/">
                    Case Filing and Processing system
                 </Link>

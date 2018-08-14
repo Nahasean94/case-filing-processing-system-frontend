@@ -17,10 +17,13 @@ body {
 .profile-info{
     alignment: center;
 }
+.bar{
+    height: 40px;
+}
 
 .bd-sidebar {
     border-right: 1px solid rgba(0, 0, 0, .1);
-    /*padding-bottom: 9999px;*/
+    padding-bottom: 30%;
     /*margin-bottom: -9999px;*/
     overflow: hidden;
     /*background-color: #f5f5f5;*/
@@ -28,11 +31,17 @@ body {
     /*margin-left: 10px;*/
     padding-right: 0px;
 }
+.DraftEditor-editorContainer{
+    /*height: 200px;*/
+}
+.DraftEditor-root{
+    border:1px solid whitesmoke !important;
+}
 
 .bd-location {
     border-left: 1px solid rgba(0, 0, 0, .1);
-    padding-bottom: 9999px;
-    margin-bottom: -9999px;
+    /*padding-bottom: 9999px;*/
+    /*margin-bottom: -9999px;*/
     overflow: hidden;
     padding-top: 10px;
     overflow-y: auto;
@@ -65,7 +74,7 @@ body {
     background-color: #c7c8c9 !important;
 }
 .inbox-list-selected {
-    background-color: #1e7e34;
+    background-color: #2b3b2a;
     color: white;
     font-size: 1.1rem;
 }
@@ -73,7 +82,7 @@ body {
     align-items: center;
 }
 .btn-dark{
-    background-color: #1e7e34;
+    background-color: #2b3b2a;
 }
 .inbox-list {
     border-bottom: 1px solid rgba(0, 0, 0, .1);
@@ -88,19 +97,19 @@ body {
 }
 
 .form-control:focus {
-    border-color: #1e7e34;
-    box-shadow: -1px 1px 11px -1px #1e7e34;
+    border-color: #2b3b2a;
+    box-shadow: -1px 1px 11px -1px #2b3b2a;
 }
 
 .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
     color: white;
-    background-color: #1e7e34;
+    background-color: #2b3b2a;
     font-size: 1.2rem;
     width: 100%;
 }
 
 .nav-link {
-    color: #1e7e34;
+    color: #2b3b2a;
 }
 
 .nav-item {
@@ -112,7 +121,7 @@ body {
 }
 
 .bg-dark-green {
-    background-color: #1e7e34 !important;
+    background-color: #2b3b2a !important;
 }
 
 /*.alert-dark{*/

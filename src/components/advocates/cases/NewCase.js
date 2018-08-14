@@ -5,6 +5,9 @@ import {Progress} from 'reactstrap'
 import CaseType from "./new-case-forms/CaseType"
 import CaseDescription from "./new-case-forms/CaseDescription"
 import Plaintiff from "./new-case-forms/Plaintiff"
+import Defendant from "./new-case-forms/Defendant"
+import Complaint from "./new-case-forms/Forms"
+import Confirm from "./new-case-forms/Confirm"
 
 
 class NewCase extends React.Component {
@@ -63,7 +66,9 @@ class NewCase extends React.Component {
         this.toCaseDescription = this.toCaseDescription.bind(this)
         this.toPlaintiff = this.toPlaintiff.bind(this)
         this.toDefendant = this.toDefendant.bind(this)
+        this.toForms = this.toForms.bind(this)
         this.toConfirm = this.toConfirm.bind(this)
+        this.onSubmit = this.onSubmit.bind(this)
     }
 
     toCaseType() {
@@ -71,19 +76,27 @@ class NewCase extends React.Component {
     }
 
     toCaseDescription() {
-        this.setState({progress: 25, step: 2, view: 'case-description'})
+        this.setState({progress: 20, step: 2, view: 'case-description'})
     }
 
     toPlaintiff() {
-        this.setState({progress: 50, step: 3, view: 'plaintiff'})
+        this.setState({progress: 40, step: 3, view: 'plaintiff'})
     }
 
     toDefendant() {
-        this.setState({progress: 75, step: 4, view: 'defendant'})
+        this.setState({progress: 60, step: 4, view: 'defendant'})
+    }
+
+    toForms() {
+        this.setState({progress: 80, step: 5, view: 'forms'})
     }
 
     toConfirm() {
-        this.setState({progress: 100, step: 5, view: 'confirm'})
+        this.setState({progress: 100, step: 6, view: 'confirm'})
+    }
+
+    onSubmit() {
+        console.log(this.state)
     }
 
 
@@ -95,7 +108,7 @@ class NewCase extends React.Component {
                     <Menu router={this.context.router} active="new-case"/>
                 </div>
                 <div className="col-sm-8 col-md-8 col-xl-8 bd-content">
-                    <div className="text-center">Step {this.state.step} of 5</div>
+                    <div className="text-center">Step {this.state.step} of 6</div>
                     <Progress color="success" value={this.state.progress}/>
                     <br/>
                     {view === 'case-type' && <div>
@@ -104,27 +117,20 @@ class NewCase extends React.Component {
 
                     </div>}
                     {view === 'case-description' &&
-                        <CaseDescription toCaseType={this.toCaseType} toPlaintiff={this.toPlaintiff}/>
-}
-                    {view === 'plaintiff' && <div>Plaintiff
-                        <Plaintiff/>
-                        <button className="btn btn-primary" onClick={this.toCaseDescription}>Back</button>
-                        <br/>
-                        <button className="btn btn-primary" onClick={this.toDefendant}>Next</button>
-
+                    <CaseDescription toCaseType={this.toCaseType} toPlaintiff={this.toPlaintiff}/>
+                    }
+                    {view === 'plaintiff' &&
+                    <Plaintiff toCaseDescription={this.toCaseDescription} toDefendant={this.toDefendant}/>
+                    }
+                    {view === 'defendant' && <div>
+                        <Defendant toPlaintiff={this.toPlaintiff} toForms={this.toForms}/>
                     </div>}
-                    {view === 'defendant' && <div>Defendant
-                        <br/>
-                        <button className="btn btn-primary" onClick={this.toPlaintiff}>Back</button>
-                        <br/>
-                        <button className="btn btn-primary" onClick={this.toConfirm}>Next</button>
-
+                    {view === 'forms' && <div>
+                        <Complaint toDefendant={this.toDefendant} toConfirm={this.toConfirm}/>
                     </div>}
-                    {view === 'confirm' && <div>Confirm
+                    {view === 'confirm' && <div>
                         <br/>
-                        <button className="btn btn-primary" onClick={this.toDefendant}>Back</button>
-                        <br/>
-                        <button className="btn btn-primary">Next</button>
+                        <Confirm toForms={this.toForms} toSave={this.onSubmit}/>
 
                     </div>}
 

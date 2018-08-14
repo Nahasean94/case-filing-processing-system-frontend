@@ -1,18 +1,18 @@
 import React, {Component} from 'react'
 import PropTypes from 'prop-types'
-import TextFieldGroup from "../../../../shared/TextFieldsGroup"
+import TextFieldGroup from "../../../../../shared/TextFieldsGroup"
 import validator from 'validator'
 import {isEmpty} from 'lodash'
-import {fetchOptionsOverride} from "../../../../shared/fetchOverrideOptions"
-import {isAdvocateExists, registerAdvocate} from '../../../../shared/queries'
+import {fetchOptionsOverride} from "../../../../../shared/fetchOverrideOptions"
+import {isAdvocateExists, registerAdvocate} from '../../../../../shared/queries'
 import {Consumer} from "graphql-react"
 
 
-class Organization extends Component {
+class Individual extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            name: '',
+            names: '',
             location: '',
             dob: '',
             gender: '',
@@ -21,8 +21,7 @@ class Organization extends Component {
             cellphone: '',
             errors: {},
             isLoading: false,
-            invalid: false,
-            postal_address:''
+            invalid: false
 
         }
         this.onChange = this.onChange.bind(this)
@@ -107,22 +106,22 @@ class Organization extends Component {
     render() {
 
         const {
-            errors, isLoading, invalid, practice_number, name, first_name, location, dob, gender, password, passwordConfirmation, message, email, cellphone
+            errors, isLoading, invalid, practice_number, names, first_name, location, dob, gender, password, passwordConfirmation, message, email, cellphone
         } = this.state
 
         return (
 
             <form onSubmit={this.onSubmit}>
                 {message && <div className="alert alert-success">{message}</div>}
-                <h1>Add details of the plaintiff</h1>
+
 
                 <TextFieldGroup
                     label="Names"
                     type="text"
-                    name="name"
-                    value={name}
+                    name="names"
+                    value={names}
                     onChange={this.onChange}
-                    error={errors.name}
+                    error={errors.names}
                 />
 
                 <TextFieldGroup
@@ -186,8 +185,8 @@ class Organization extends Component {
     }
 }
 
-Organization.contextTypes = {
+Individual.contextTypes = {
     router: PropTypes.object.isRequired
 }
 
-export default Organization
+export default Individual
