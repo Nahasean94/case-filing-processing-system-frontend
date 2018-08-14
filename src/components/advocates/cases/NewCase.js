@@ -21,7 +21,7 @@ class NewCase extends React.Component {
             defendant: {},
             forms: {},
             confirm: false,
-            view: 'case-type'
+            view: localStorage.getItem("view") ? localStorage.getItem("view") : 'case-type'
 
         }
 
@@ -33,6 +33,33 @@ class NewCase extends React.Component {
         this.toConfirm = this.toConfirm.bind(this)
         this.onSubmit = this.onSubmit.bind(this)
         this.submitForms = this.submitForms.bind(this)
+        if (localStorage.getItem("view")) {
+            const view = localStorage.getItem("view")
+            if (view === 'case-type') {
+                this.state.progress = 0
+                this.state.step = 1
+            }
+            if (view === 'case-description') {
+                this.state.progress = 20
+                this.state.step = 2
+            }
+            if (view === 'plaintiff') {
+                this.state.progress = 40
+                this.state.step = 3
+            }
+            if (view === 'defendant') {
+                this.state.progress = 60
+                this.state.step = 4
+            }
+            if (view === 'forms') {
+                this.state.progress = 80
+                this.state.step = 5
+            }
+            if (view === 'forms') {
+                this.state.progress = 100
+                this.state.step = 6
+            }
+        }
 
     }
 

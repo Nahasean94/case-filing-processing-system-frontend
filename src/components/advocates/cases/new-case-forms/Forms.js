@@ -12,11 +12,19 @@ class Forms extends Component {
         super(props)
         this.state = {
             fact: '',
+            form: 'Complaint',
             errors: {},
         }
+        if (localStorage.getItem("Forms")) {
+            const forms = JSON.parse(localStorage.getItem("Forms"))
+            console.log(forms)
+            forms.facts.map(fact => this.props.addFact(fact))
+        }
+
         this.onSubmit = this.onSubmit.bind(this)
         this.onChange = this.onChange.bind(this)
         this.onSave = this.onSave.bind(this)
+
     }
 
     validateInput(data) {
@@ -55,8 +63,9 @@ class Forms extends Component {
     };
 
     onSave() {
-        this.props.onSubmit(this.props.facts)
         this.props.toConfirm()
+        localStorage.setItem("Forms", JSON.stringify({form: this.state.form, facts: this.props.facts}))
+        localStorage.setItem("view", "forms")
     }
 
     render() {
@@ -106,7 +115,6 @@ Forms.propTypes = {
     clearFacts: PropTypes.func.isRequired,
     onSubmit: PropTypes.func.isRequired,
     facts: PropTypes.array.isRequired,
-
 }
 
 function mapStateToProps(state) {
