@@ -126,7 +126,7 @@ class Individual extends Component {
     render() {
 
         const {
-            errors, isLoading, invalid, practice_number, names, first_name, post_address, dob, gender, password, passwordConfirmation, message, email, cellphone
+            errors, isLoading, invalid, names,  post_address, dob, gender, message, email, cellphone
         } = this.state
 
         return (

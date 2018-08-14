@@ -20,6 +20,12 @@ class CaseType extends React.Component {
         this.handleCaseType = this.handleCaseType.bind(this)
         this.handleCaseCategories = this.handleCaseCategories.bind(this)
         this.onSubmit = this.onSubmit.bind(this)
+        if (localStorage.getItem("CaseType")) {
+            const caseType = JSON.parse(localStorage.getItem("CaseType"))
+            this.state.court_station = caseType.court_station
+            this.state.case_category = caseType.case_category
+            this.state.case_type = caseType.case_type
+        }
     }
 
     handleCourtStations(station) {
@@ -63,8 +69,17 @@ class CaseType extends React.Component {
     onSubmit(e) {
         e.preventDefault()
         // if (this.isValid()) {
-            this.setState({errors: {}})
-            this.props.toCaseDescription()
+        this.setState({errors: {}})
+
+        const caseDescription = {
+            case_category: this.state.case_category,
+            case_type: this.state.case_type,
+            court_station: this.state.court_station,
+        }
+        localStorage.setItem("CaseType", JSON.stringify(caseDescription))
+        localStorage.setItem("view", "case-type")
+
+        this.props.toCaseDescription()
         // }
     }
 
@@ -184,7 +199,7 @@ class CaseType extends React.Component {
                             </Query>
                             {errors ? errors.case_type && <div className="alert alert-danger">
                                 {errors.case_type}
-                            </div> :''}
+                            </div> : ''}
                         </div>
                     </div>
                     <div className="form-group row">

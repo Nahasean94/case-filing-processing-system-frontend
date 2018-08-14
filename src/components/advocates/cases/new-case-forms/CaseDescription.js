@@ -17,6 +17,11 @@ class CaseDescription extends Component {
         }
         this.onSubmit = this.onSubmit.bind(this)
         this.onChange = this.onChange.bind(this)
+        if (localStorage.getItem("CaseDescription")) {
+            const caseDescription = JSON.parse(localStorage.getItem("CaseDescription"))
+            this.state.title=caseDescription.title
+            this.state.description=caseDescription.description
+        }
     }
 
     onChange(e) {
@@ -50,6 +55,12 @@ class CaseDescription extends Component {
     onSubmit(e) {
         e.preventDefault()
         // if (this.isValid()) {
+        const caseDescription = {
+            title: this.state.title,
+            description: this.state.description,
+        }
+        localStorage.setItem("CaseDescription", JSON.stringify(caseDescription))
+        localStorage.setItem("view", "case-description")
             this.props.toPlaintiff()
         // }
     }
