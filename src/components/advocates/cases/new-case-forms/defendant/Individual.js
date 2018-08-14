@@ -13,12 +13,9 @@ class Individual extends Component {
         super(props)
         this.state = {
             names: '',
-            location: '',
-            dob: '',
             gender: '',
-            message: '',
-            email: '',
             cellphone: '',
+            location: '',
             errors: {},
             isLoading: false,
             invalid: false
@@ -172,14 +169,14 @@ class Individual extends Component {
                         {errors.gender && <div className="invalid-feedback">{errors.gender}</div>}
                     </div>
                 </div>
-                <div className="form-group row">
-                    <div className="col-sm-9 offset-sm-3">
-                        <button disabled={isLoading || invalid}
-                                className="btn btn-dark btn-sm form-control"
-                                onClick={this.forwardToContactDetails}>Sign up
-                        </button>
-                    </div>
-                </div>
+                {/*<div className="form-group row">*/}
+                    {/*<div className="col-sm-9 offset-sm-3">*/}
+                        {/*<button disabled={isLoading || invalid}*/}
+                                {/*className="btn btn-dark btn-sm form-control"*/}
+                                {/*onClick={this.forwardToContactDetails}>Sign up*/}
+                        {/*</button>*/}
+                    {/*</div>*/}
+                {/*</div>*/}
             </form>
         )
     }

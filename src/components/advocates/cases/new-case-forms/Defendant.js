@@ -20,20 +20,20 @@ class Plaintiff extends React.Component {
         const {view} = this.state
         return (<div>
             <form>
-                <h3>Add details of the plaintiff</h3>
+                <h3>Add details of the Defendant</h3>
                 <fieldset>
                     <div className="form-check form-check-inline">
                         <input className="form-check-input form-check-inline" type="radio"
                                value='individual' name="plaintiff"
                                onChange={this.handlePlaintiffChange}
-                               id="individual"/>
+                               id="individual" checked={view === 'individual'}/>
                         <label className="form-check-label" htmlFor="individual">Individual</label>
                     </div>
                     <div className="form-check form-check-inline">
                         <input className="form-check-input form-check-inline" type="radio"
                                value='organization' name="plaintiff"
                                onChange={this.handlePlaintiffChange}
-                               id="organization"/>
+                               id="organization" checked={view === 'organization'}/>
                         <label className="form-check-label" htmlFor="organization">Organization</label>
                     </div>
                     {view === 'individual' && <Individual/>}

@@ -9,54 +9,17 @@ import Defendant from "./new-case-forms/Defendant"
 import Complaint from "./new-case-forms/Forms"
 import Confirm from "./new-case-forms/Confirm"
 
-
 class NewCase extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
             progress: 0,
             step: 1,
-            case_type: {
-                court_station: '',
-                case_category: '',
-                case_type: '',
-            },
-            case_description: {
-                title: '',
-                description: ''
-            },
-            plaintiff: {
-                type: 'individual',
-                individual: {
-                    names: '',
-                    email: '',
-                    gender: '',
-                    cellphone: '',
-                    location: '',
-                },
-                organization: {
-                    name: '',
-                    email: '',
-                    cellphone: '',
-                    location: '',
-                    postal_address: '',
-                }
-            },
-            defendant: {
-                type: 'individual',
-                individual: {
-                    names: '',
-                    gender: '',
-                    cellphone: '',
-                    location: '',
-                },
-                organization: {
-                    name: '',
-                    cellphone: '',
-                    location: '',
-                    postal_address: '',
-                }
-            },
+            case_type: {},
+            case_description: {},
+            plaintiff: {},
+            defendant: {},
+            forms: {},
             confirm: false,
             view: 'case-type'
 
@@ -69,6 +32,8 @@ class NewCase extends React.Component {
         this.toForms = this.toForms.bind(this)
         this.toConfirm = this.toConfirm.bind(this)
         this.onSubmit = this.onSubmit.bind(this)
+        this.submitForms = this.submitForms.bind(this)
+
     }
 
     toCaseType() {
@@ -99,6 +64,10 @@ class NewCase extends React.Component {
         console.log(this.state)
     }
 
+    submitForms(forms) {
+        this.setState({forms})
+    }
+
 
     render() {
         const {progress, step, case_type, case_description, plaintiff, defendant, confirm, view,} = this.state
@@ -126,7 +95,8 @@ class NewCase extends React.Component {
                         <Defendant toPlaintiff={this.toPlaintiff} toForms={this.toForms}/>
                     </div>}
                     {view === 'forms' && <div>
-                        <Complaint toDefendant={this.toDefendant} toConfirm={this.toConfirm}/>
+                        <Complaint toDefendant={this.toDefendant} toConfirm={this.toConfirm}
+                                   onSubmit={this.submitForms}/>
                     </div>}
                     {view === 'confirm' && <div>
                         <br/>

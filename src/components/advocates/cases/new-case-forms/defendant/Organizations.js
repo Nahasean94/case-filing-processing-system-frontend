@@ -12,17 +12,15 @@ class Organization extends Component {
     constructor(props) {
         super(props)
         this.state = {
+            type:'organization',
             name: '',
-            location: '',
-            dob: '',
-            gender: '',
-            message: '',
-            email: '',
             cellphone: '',
+            location: '',
+            postal_address: '',
             errors: {},
             isLoading: false,
             invalid: false,
-            postal_address:''
+
 
         }
         this.onChange = this.onChange.bind(this)
@@ -173,14 +171,14 @@ class Organization extends Component {
                         {errors.gender && <div className="invalid-feedback">{errors.gender}</div>}
                     </div>
                 </div>
-                <div className="form-group row">
-                    <div className="col-sm-9 offset-sm-3">
-                        <button disabled={isLoading || invalid}
-                                className="btn btn-dark btn-sm form-control"
-                                onClick={this.forwardToContactDetails}>Sign up
-                        </button>
-                    </div>
-                </div>
+                {/*<div className="form-group row">*/}
+                    {/*<div className="col-sm-9 offset-sm-3">*/}
+                        {/*<button disabled={isLoading || invalid}*/}
+                                {/*className="btn btn-dark btn-sm form-control"*/}
+                                {/*onClick={this.forwardToContactDetails}>Sign up*/}
+                        {/*</button>*/}
+                    {/*</div>*/}
+                {/*</div>*/}
             </form>
         )
     }

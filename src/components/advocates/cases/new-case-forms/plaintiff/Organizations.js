@@ -12,17 +12,15 @@ class Organization extends Component {
     constructor(props) {
         super(props)
         this.state = {
+            type:'',
             name: '',
-            location: '',
-            dob: '',
-            gender: '',
-            message: '',
             email: '',
             cellphone: '',
+            location: '',
+            postal_address: '',
             errors: {},
             isLoading: false,
             invalid: false,
-            postal_address:''
 
         }
         this.onChange = this.onChange.bind(this)

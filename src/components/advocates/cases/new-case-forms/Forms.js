@@ -16,6 +16,7 @@ class Forms extends Component {
         }
         this.onSubmit = this.onSubmit.bind(this)
         this.onChange = this.onChange.bind(this)
+        this.onSave = this.onSave.bind(this)
     }
 
     validateInput(data) {
@@ -53,6 +54,11 @@ class Forms extends Component {
         }
     };
 
+    onSave() {
+        this.props.onSubmit(this.props.facts)
+        this.props.toConfirm()
+    }
+
     render() {
         const {facts} = this.props
         const {fact, errors} = this.state
@@ -82,7 +88,7 @@ class Forms extends Component {
                     </div>
                     <div className="col-sm-4 offset-sm-1">
                         <button className="form-control btn btn-dark btn-sm"
-                                onClick={this.props.toConfirm}>Next
+                                onClick={this.onSave}>Next
                         </button>
                     </div>
                 </div>
@@ -98,6 +104,9 @@ Forms.propTypes = {
     addFact: PropTypes.func.isRequired,
     deleteFact: PropTypes.func.isRequired,
     clearFacts: PropTypes.func.isRequired,
+    onSubmit: PropTypes.func.isRequired,
+    facts: PropTypes.array.isRequired,
+
 }
 
 function mapStateToProps(state) {
