@@ -1,11 +1,9 @@
 import React, {Component} from 'react'
-import PropTypes from 'prop-types'
 import TextFieldGroup from "../../../../../shared/TextFieldsGroup"
 import validator from 'validator'
 import {isEmpty} from 'lodash'
 import {fetchOptionsOverride} from "../../../../../shared/fetchOverrideOptions"
-import {isAdvocateExists, registerAdvocate} from '../../../../../shared/queries'
-import {Consumer} from "graphql-react"
+import {isAdvocateExists} from '../../../../../shared/queries'
 
 
 class Individual extends Component {
@@ -14,7 +12,7 @@ class Individual extends Component {
         this.state = {
             type: 'individual',
             names: '',
-            location: '',
+            post_address: '',
             dob: '',
             gender: '',
             message: '',
@@ -28,7 +26,17 @@ class Individual extends Component {
         this.onChange = this.onChange.bind(this)
         this.onSubmit = this.onSubmit.bind(this)
         this.checkAdvocateExists = this.checkAdvocateExists.bind(this)
-
+        if (localStorage.getItem("Plaintiff")) {
+            let individual = JSON.parse(localStorage.getItem("Plaintiff")).plaintiff
+            if (individual.type === 'individual') {
+                this.state.names = individual.names
+                this.state.gender = individual.gender
+                this.state.cellphone = individual.cellphone
+                this.state.email = individual.email
+                this.state.dob = individual.dob
+                this.state.post_address = individual.post_address
+            }
+        }
     }
 
     checkAdvocateExists(e) {
@@ -67,8 +75,8 @@ class Individual extends Component {
             errors.practice_number = 'This field is required'
         }
 
-        if (validator.isEmpty(data.location)) {
-            errors.location = 'This field is required'
+        if (validator.isEmpty(data.post_address)) {
+            errors.post_address = 'This field is required'
         }
         if (validator.isEmpty(data.gender)) {
             errors.gender = 'This field is required'
@@ -94,10 +102,21 @@ class Individual extends Component {
 
     onSubmit(e) {
         e.preventDefault()
-        if (this.isInfoValid()) {
-            this.setState({errors: {}, isLoading: true})
-
+        // if (this.isInfoValid()) {
+        const plaintiff = {
+            type: this.state.type,
+            names: this.state.names,
+            cellphone: this.state.cellphone,
+            email: this.state.email,
+            gender: this.state.gender,
+            dob: this.state.dob,
+            post_address: this.state.post_address,
         }
+        localStorage.setItem("Plaintiff", JSON.stringify({view: 'individual', plaintiff: plaintiff}))
+        localStorage.setItem("view", "plaintiff")
+        this.setState({errors: {}, isLoading: true})
+        this.props.toDefendant()
+        // }
     }
 
     onChange(e) {
@@ -107,7 +126,7 @@ class Individual extends Component {
     render() {
 
         const {
-            errors, isLoading, invalid, practice_number, names, first_name, location, dob, gender, password, passwordConfirmation, message, email, cellphone
+            errors, isLoading, invalid, practice_number, names, first_name, post_address, dob, gender, password, passwordConfirmation, message, email, cellphone
         } = this.state
 
         return (
@@ -126,21 +145,12 @@ class Individual extends Component {
                 />
 
                 <TextFieldGroup
-                    label="Location"
+                    label="PO Box"
                     type="text"
-                    name="location"
-                    value={location}
+                    name="post_address"
+                    value={post_address}
                     onChange={this.onChange}
-                    error={errors.location}
-                />
-
-                <TextFieldGroup
-                    label="Date of birth"
-                    type="date"
-                    name="dob"
-                    value={dob}
-                    onChange={this.onChange}
-                    error={errors.dob}
+                    error={errors.post_address}
                 />
 
                 <TextFieldGroup
@@ -150,6 +160,14 @@ class Individual extends Component {
                     value={email}
                     onChange={this.onChange}
                     error={errors.email}
+                />
+                <TextFieldGroup
+                    label="Date of birth"
+                    type="date"
+                    name="dob"
+                    value={dob}
+                    onChange={this.onChange}
+                    error={errors.dob}
                 />
                 <TextFieldGroup
                     label="Phone number"
@@ -174,20 +192,22 @@ class Individual extends Component {
                     </div>
                 </div>
                 <div className="form-group row">
-                    <div className="col-sm-9 offset-sm-3">
-                        <button disabled={isLoading || invalid}
-                                className="btn btn-dark btn-sm form-control"
-                                onClick={this.forwardToContactDetails}>Sign up
+                    <div className="col-sm-4 offset-sm-3">
+                        <button className="form-control btn btn-success btn-sm"
+                                onClick={this.props.toCaseDescription}>Back
+                        </button>
+                    </div>
+                    <div className="col-sm-4 offset-sm-1">
+                        <button className="form-control btn btn-dark btn-sm"
+                                onClick={this.onSubmit}>Next
                         </button>
                     </div>
                 </div>
+
             </form>
         )
     }
 }
 
-Individual.contextTypes = {
-    router: PropTypes.object.isRequired
-}
 
 export default Individual

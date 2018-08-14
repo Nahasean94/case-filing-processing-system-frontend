@@ -1,23 +1,20 @@
 import React, {Component} from 'react'
-import PropTypes from 'prop-types'
 import TextFieldGroup from "../../../../../shared/TextFieldsGroup"
 import validator from 'validator'
 import {isEmpty} from 'lodash'
 import {fetchOptionsOverride} from "../../../../../shared/fetchOverrideOptions"
-import {isAdvocateExists, registerAdvocate} from '../../../../../shared/queries'
-import {Consumer} from "graphql-react"
+import {isAdvocateExists} from '../../../../../shared/queries'
 
 
 class Organization extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            type:'',
+            type: 'organization',
             name: '',
             email: '',
             cellphone: '',
-            location: '',
-            postal_address: '',
+            post_address: '',
             errors: {},
             isLoading: false,
             invalid: false,
@@ -26,6 +23,15 @@ class Organization extends Component {
         this.onChange = this.onChange.bind(this)
         this.onSubmit = this.onSubmit.bind(this)
         this.checkAdvocateExists = this.checkAdvocateExists.bind(this)
+        if (localStorage.getItem("Plaintiff")) {
+            let organization = JSON.parse(localStorage.getItem("Plaintiff")).plaintiff
+            if (organization.type === 'organization') {
+                this.state.name = organization.name
+                this.state.email = organization.email
+                this.state.post_address = organization.post_address
+                this.state.post_address = organization.post_address
+            }
+        }
 
     }
 
@@ -59,20 +65,16 @@ class Organization extends Component {
         }
     }
 
-    validateInfo(data) {
+    valiemailInfo(data) {
         let errors = {}
         if (!data.practice_number) {
             errors.practice_number = 'This field is required'
         }
-
-        if (validator.isEmpty(data.location)) {
-            errors.location = 'This field is required'
-        }
         if (validator.isEmpty(data.gender)) {
             errors.gender = 'This field is required'
         }
-        if (validator.isEmpty(data.dob)) {
-            errors.dob = 'This field is required'
+        if (validator.isEmpty(data.email)) {
+            errors.email = 'This field is required'
         }
         return {
             errors,
@@ -82,7 +84,7 @@ class Organization extends Component {
 
 
     isInfoValid() {
-        const {errors, isValid} = this.validateInfo(this.state)
+        const {errors, isValid} = this.valiemailInfo(this.state)
         if (!isValid) {
             this.setState({errors})
         }
@@ -92,10 +94,20 @@ class Organization extends Component {
 
     onSubmit(e) {
         e.preventDefault()
-        if (this.isInfoValid()) {
-            this.setState({errors: {}, isLoading: true})
-
+        // if (this.isInfoValid()) {
+        const plaintiff = {
+            type: this.state.type,
+            name: this.state.name,
+            cellphone: this.state.cellphone,
+            email: this.state.email,
+            post_address: this.state.post_address,
         }
+        localStorage.setItem("Plaintiff", JSON.stringify({view: 'organization', plaintiff: plaintiff}))
+        localStorage.setItem("view", "plaintiff")
+        this.setState({errors: {}, isLoading: true})
+        this.props.toDefendant()
+
+        // }
     }
 
     onChange(e) {
@@ -105,14 +117,13 @@ class Organization extends Component {
     render() {
 
         const {
-            errors, isLoading, invalid, practice_number, name, first_name, location, dob, gender, password, passwordConfirmation, message, email, cellphone
+            errors, isLoading, invalid, name, post_address, email, message, cellphone
         } = this.state
 
         return (
 
             <form onSubmit={this.onSubmit}>
                 {message && <div className="alert alert-success">{message}</div>}
-                <h1>Add details of the plaintiff</h1>
 
                 <TextFieldGroup
                     label="Names"
@@ -124,23 +135,13 @@ class Organization extends Component {
                 />
 
                 <TextFieldGroup
-                    label="Location"
+                    label="PO Box"
                     type="text"
-                    name="location"
-                    value={location}
+                    name="post_address"
+                    value={post_address}
                     onChange={this.onChange}
-                    error={errors.location}
+                    error={errors.post_address}
                 />
-
-                <TextFieldGroup
-                    label="Date of birth"
-                    type="date"
-                    name="dob"
-                    value={dob}
-                    onChange={this.onChange}
-                    error={errors.dob}
-                />
-
                 <TextFieldGroup
                     label="Email"
                     type="email"
@@ -160,32 +161,22 @@ class Organization extends Component {
                 />
 
                 <div className="form-group row">
-                    <label className="col-sm-3 col-form-label" htmlFor="gender">Gender</label>
-                    <div className="col-sm-9">
-                        <select className="form-control form-control-sm" id="gender" name="gender"
-                                required="true" value={gender} onChange={this.onChange}>
-                            <option>Select</option>
-                            <option value="male">Male</option>
-                            <option value="female">Female</option>
-                        </select>
-                        {errors.gender && <div className="invalid-feedback">{errors.gender}</div>}
-                    </div>
-                </div>
-                <div className="form-group row">
-                    <div className="col-sm-9 offset-sm-3">
-                        <button disabled={isLoading || invalid}
-                                className="btn btn-dark btn-sm form-control"
-                                onClick={this.forwardToContactDetails}>Sign up
+                    <div className="col-sm-4 offset-sm-3">
+                        <button className="form-control btn btn-success btn-sm"
+                                onClick={this.props.toCaseDescription}>Back
                         </button>
                     </div>
+                    <div className="col-sm-4 offset-sm-1">
+                        <button className="form-control btn btn-dark btn-sm"
+                                onClick={this.onSubmit}>Next
+                        </button>
+                    </div>
+
                 </div>
             </form>
         )
     }
 }
 
-Organization.contextTypes = {
-    router: PropTypes.object.isRequired
-}
 
 export default Organization
