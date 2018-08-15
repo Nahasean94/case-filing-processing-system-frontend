@@ -12,7 +12,7 @@ class Forms extends Component {
         super(props)
         this.state = {
             fact: '',
-            form: 'Complaint',
+            form: '5b7274f27bb873209c99905b',
             errors: {},
         }
         if (localStorage.getItem("Forms")) {
@@ -115,6 +115,7 @@ class Forms extends Component {
                         return <li>{fact}</li>
                     })}
                 </ol>
+                <hr/>
                 <div className="form-group row">
                     <div className="col-sm-4 offset-sm-3">
                         <button className="form-control btn btn-success btn-sm"

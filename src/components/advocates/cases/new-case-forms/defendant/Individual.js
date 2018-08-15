@@ -12,7 +12,7 @@ class Individual extends Component {
         super(props)
         this.state = {
             type: 'individual',
-            names: '',
+            name: '',
             gender: '',
             cellphone: '',
             errors: {},
@@ -27,7 +27,7 @@ class Individual extends Component {
         if (localStorage.getItem("Defendant")) {
             let individual = JSON.parse(localStorage.getItem("Defendant")).defendant
             if (individual.type === 'individual') {
-                this.state.names = individual.names
+                this.state.name = individual.name
                 this.state.cellphone = individual.cellphone
                 this.state.email = individual.email
             }
@@ -65,14 +65,14 @@ class Individual extends Component {
 
     validateInfo(data) {
         let errors = {}
-        if (validator.isEmpty(data.names)) {
-            errors.names = 'This field is required'
+        if (validator.isEmpty(data.name)) {
+            errors.name = 'This field is required'
         }
-        if (!data.names.match(/[\a-zA-Z]/g)) {
-            errors.names = "Organization name can only contain letters and spaces"
+        if (!data.name.match(/[\a-zA-Z]/g)) {
+            errors.name = "Organization name can only contain letters and spaces"
         }
-        if (data.names.length<=2) {
-            errors.names = "Organization name must have more than 2 letters"
+        if (data.name.length<=2) {
+            errors.name = "Organization name must have more than 2 letters"
         }
         if (validator.isEmpty(data.email)) {
             errors.email = 'This field is required'
@@ -107,7 +107,7 @@ class Individual extends Component {
         if (this.isInfoValid()) {
         const defendant = {
             type: this.state.type,
-            names: this.state.names,
+            name: this.state.name,
             cellphone: this.state.cellphone,
             email: this.state.email,
         }
@@ -125,7 +125,7 @@ class Individual extends Component {
     render() {
 
         const {
-            errors, isLoading, invalid, names,  message, email, cellphone
+            errors, isLoading, invalid, name,  message, email, cellphone
         } = this.state
 
         return (
@@ -133,12 +133,12 @@ class Individual extends Component {
             <form onSubmit={this.onSubmit}>
                 {message && <div className="alert alert-success">{message}</div>}
                 <TextFieldGroup
-                    label="Full names"
+                    label="Full name"
                     type="text"
-                    name="names"
-                    value={names}
+                    name="name"
+                    value={name}
                     onChange={this.onChange}
-                    error={errors.names}
+                    error={errors.name}
                 />
 
                 <TextFieldGroup

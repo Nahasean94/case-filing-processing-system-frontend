@@ -153,7 +153,7 @@ const caseCategories = `
   }
 }
 `
-const caseTypes= `
+const caseTypes = `
    {
   caseTypes{
    id
@@ -182,7 +182,7 @@ const addCaseCategory = `
    name
   }
 }`
-const addCaseType= `
+const addCaseType = `
    mutation($name:String!) {
   addCaseType(name:$name) {
    id
@@ -222,8 +222,69 @@ signin
 date
 }
 }`
+const addNewForm = `
+mutation($type_of_form:ID!,$facts:[String!]!){
+addNewForm(type_of_form:$type_of_form,facts:$facts){
+id
+}
+}`
+const addOrganization = `
+mutation($name:String!,$email:String!,$cellphone:Long!){
+addOrganization(name:$name,email:$email,cellphone:$cellphone){
+id
+}
+}`
+const addIndividual = `
+mutation($name:String!,$email:String!,$cellphone:Long!,$dob:String!,$gender:String!){
+addIndividual(name:$name,email:$email,cellphone:$cellphone,dob:$dob,gender:$gender){
+id
+}
+}`
+const makePayment = `
+mutation($fee:Int!){
+makePayment(fee:$fee){
+id
+}
+}`
+
+const addNewCase = `
+mutation(
+$title:String!,
+$description:String!,
+$court_station:ID!,
+$case_type:ID!,
+$case_category:ID!,
+$defendant_party_type:String!,
+$defendant_name:String!,
+$defendant_email:String!,
+$defendant_cellphone:Long!,
+$plaintiff:ID!,
+$plaintiff_type:String!,
+$form:ID!,
+$payment:ID!){
+addNewCase(title:$title,
+description:$description,
+court_station:$court_station,
+case_type:$case_type,
+case_category:$case_category,
+defendant_party_type:$defendant_party_type,
+defendant_name:$defendant_name,
+defendant_email:$defendant_email,
+defendant_cellphone:$defendant_cellphone,
+plaintiff:$plaintiff,
+plaintiff_type:$plaintiff_type,
+form:$form,
+payment:$payment){
+id
+}
+}`
 
 export {
+    addNewCase,
+    addNewForm,
+    makePayment,
+    addIndividual,
+    addOrganization,
     registerAdvocate,
     isAdvocateExists,
     adminExists,
