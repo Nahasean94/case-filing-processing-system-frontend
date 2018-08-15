@@ -20,6 +20,9 @@ body {
 .bar{
     height: 40px;
 }
+.modal-lg {
+    max-width: 1000px;
+}
 
 .bd-sidebar {
     border-right: 1px solid rgba(0, 0, 0, .1);

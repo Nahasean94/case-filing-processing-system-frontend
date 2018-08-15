@@ -28,6 +28,35 @@ const isCourtStationExists = `
   }
 }
 `
+const findPendingCases = `
+   query($advocate:ID!) {
+  findPendingCases(advocate:$advocate) {
+   id
+   case_number{
+   prefix
+   suffix
+  }
+  timestamp
+  title
+}
+}
+`
+const findCourtPendingCases = `
+   query($court_station:ID!) {
+  findCourtPendingCases(court_station:$court_station) {
+   id
+   case_number{
+   prefix
+   suffix
+  }
+  advocate{
+  surname
+  }
+  timestamp
+  title
+}
+}
+`
 const addCourtStation = `
    mutation($name:String!) {
   addCourtStation(name:$name) {
@@ -314,5 +343,8 @@ export {
     isDeputyRegistrarExists,
     registerDeputyRegistrar,
     getCourtAssistant,
-    getDeputyRegistrar
+    getDeputyRegistrar,
+    findPendingCases,
+    findCourtPendingCases
+
 }

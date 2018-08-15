@@ -91,17 +91,10 @@ class NewCase extends React.Component {
         this.setState({progress: 100, step: 6, view: 'confirm'})
     }
 
-    onSubmit() {
-        console.log(this.state)
-    }
-
-    submitForms(forms) {
-        this.setState({forms})
-    }
 
 
     render() {
-        const {progress, step, case_type, case_description, plaintiff, defendant, confirm, view,} = this.state
+        const { view,} = this.state
         return (<div className="container">
             <div className="row">
                 <div className="col-sm- col-md-2 bd-sidebar">

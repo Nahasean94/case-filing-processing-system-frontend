@@ -25,7 +25,6 @@ class Home extends React.Component {
             else if (token.role === 'registrar') {
                 this.context.router.history.push('/registrar/dashboard')
 
-
             }
             else if (token.role === 'assistant') {
                 this.context.router.history.push('/assistant/dashboard')

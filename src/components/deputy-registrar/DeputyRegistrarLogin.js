@@ -45,14 +45,9 @@ class DeputyRegistrarLogin extends React.Component {
         if (validator.isEmpty(data.password)) {
             errors.password = 'This field is required'
         }
-        // if (!data.court_station.value) {
-        //     // let errors={}
-        //     errors.form = 'You must select a court station'
-        //     // this.setState({errors:errors,invalid:true})
-        // } else {
-        //     // this.setState({errors:'',invalid:false})
-        //     errors.form = ''
-        // }
+        if (!data.court_station) {
+            errors.court_station = 'This field is required'
+        }
         return {
             errors,
             isValid: isEmpty(errors)
@@ -92,7 +87,7 @@ class DeputyRegistrarLogin extends React.Component {
                     }
                     else {
                         this.props.setLoginToken(data.deputyRegistrarLogin.token)
-                        this.context.router.history.push('/deputy-registrar/dashboard')
+                        this.context.router.history.push('/deputy-registrar/dashboard/pending-cases')
                         this.setState({
                             loading: false,
                             message: data
@@ -156,6 +151,9 @@ class DeputyRegistrarLogin extends React.Component {
                                         }
                                         }
                                     </Query>
+                                    {errors ? errors.court_station && <div className="alert alert-danger">
+                                        {errors.court_station}
+                                    </div> : ''}
                                 </div>
                             </div>
                             <TextFieldGroup
