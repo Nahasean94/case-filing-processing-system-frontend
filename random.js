@@ -30,19 +30,3 @@ request(
     }
 )
 
-
-
-$title:String!,
-$description:String!,
-$court_station:ID!,
-$case_type:ID!,
-$case_category:ID!,
-$defendant_party_type:String!,
-$defendant_name:String!,
-$defendant_email:String!,
-$defendant_cellphone:Int!,
-$plaintiff:ID!,
-$plaintiff:String!,
-$form:ID!,
-$payment:Int!,
-

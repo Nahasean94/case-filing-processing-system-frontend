@@ -2,6 +2,8 @@ import React, {Component} from 'react'
 import {fetchOptionsOverride} from "../../../../shared/fetchOverrideOptions"
 import {addIndividual, addNewCase, addNewForm, addOrganization, makePayment,} from "../../../../shared/queries"
 import {Consumer} from 'graphql-react'
+import PropTypes from "prop-types"
+import Home from "../../../Home"
 
 class Confirm extends Component {
     constructor(props) {
@@ -9,26 +11,11 @@ class Confirm extends Component {
         this.onSave = this.onSave.bind(this)
     }
 
-    /**
-     *title
-     description
-     plaintiff
-     party_type
-     party_id
-     defendant
-     party_type
-     names
-     email
-     cellphone
-     judge
-     payment
-     * */
-
-    addNewCase({case_types, case_description, defendant, plaint, plaintiff_type,form,transaction}) {
-      console.log("sdfsdf")
+    addNewCase({case_types, case_description, defendant, plaint, plaintiff_type, form, transaction}) {
+        console.log("sdfsdf")
         console.log(
-            "individual:",plaint
-            )
+            "individual:", plaint
+        )
 
         return this.props.graphql
             .query({
@@ -46,9 +33,9 @@ class Confirm extends Component {
                         defendant_email: defendant.email,
                         defendant_cellphone: defendant.cellphone,
                         plaintiff: plaint.addIndividual.id,
-                        plaintiff_type:plaintiff_type,
+                        plaintiff_type: plaintiff_type,
                         form: form.addNewForm.id,
-                        payment:transaction.makePayment.id,
+                        payment: transaction.makePayment.id,
                     },
                     query: addNewCase
                 }
@@ -157,10 +144,26 @@ class Confirm extends Component {
         const defendant = JSON.parse(localStorage.getItem("Defendant")).defendant
         const forms = JSON.parse(localStorage.getItem("Forms"))
         return this.addNewForm(forms).then(async form => {
-           return await this.makePayment().then(async transaction => {
-               return await this.addNewPlaintiff(plaintiff).then(async plaint => {
-                   const plaintiff_type=plaintiff.type
-                   return await this.addNewCase({case_types, case_description, defendant, plaint,plaintiff_type, form,transaction})
+            return await this.makePayment().then(async transaction => {
+                return await this.addNewPlaintiff(plaintiff).then(async plaint => {
+                    const plaintiff_type = plaintiff.type
+                    return await this.addNewCase({
+                        case_types,
+                        case_description,
+                        defendant,
+                        plaint,
+                        plaintiff_type,
+                        form,
+                        transaction
+                    }).then(addedCase => {
+                        localStorage.removeItem("CaseType")
+                        localStorage.removeItem("CaseDescription")
+                        localStorage.removeItem("Plaintiff")
+                        localStorage.removeItem("Defendant")
+                        localStorage.removeItem("Forms")
+                        localStorage.removeItem("view")
+                        this.context.router.history.push('/advocates/dashboard/pending-cases')
+                    })
 
                 })
             })
@@ -194,5 +197,8 @@ class Confirm extends Component {
     }
 }
 
+Confirm.contextTypes = {
+    router: PropTypes.object.isRequired
+}
 
 export default () => <Consumer>{graphql => <Confirm graphql={graphql}/>}</Consumer>
