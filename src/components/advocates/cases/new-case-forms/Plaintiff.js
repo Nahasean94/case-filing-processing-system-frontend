@@ -45,7 +45,7 @@ class Plaintiff extends React.Component {
                     </div>
                     {view === 'individual' &&
                     <Individual toCaseDescription={this.props.toCaseDescription} toDefendant={this.props.toDefendant}/>}
-                    {view === 'organization' && <Organization toCaseDescriptio={this.props.toCaseDescription}
+                    {view === 'organization' && <Organization toCaseDescription={this.props.toCaseDescription}
                                                               toDefendant={this.props.toDefendant}/>}
 
                 </fieldset>

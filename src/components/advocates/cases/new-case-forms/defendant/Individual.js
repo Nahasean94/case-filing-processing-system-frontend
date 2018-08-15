@@ -15,7 +15,6 @@ class Individual extends Component {
             names: '',
             gender: '',
             cellphone: '',
-            location: '',
             errors: {},
             isLoading: false,
             invalid: false
@@ -30,8 +29,7 @@ class Individual extends Component {
             if (individual.type === 'individual') {
                 this.state.names = individual.names
                 this.state.cellphone = individual.cellphone
-                this.state.location = individual.location
-                this.state.postal_address = individual.postal_address
+                this.state.email = individual.email
             }
         }
     }
@@ -67,18 +65,26 @@ class Individual extends Component {
 
     validateInfo(data) {
         let errors = {}
-        if (!data.practice_number) {
-            errors.practice_number = 'This field is required'
+        if (validator.isEmpty(data.names)) {
+            errors.names = 'This field is required'
         }
-
-        if (validator.isEmpty(data.location)) {
-            errors.location = 'This field is required'
+        if (!data.names.match(/[\a-zA-Z]/g)) {
+            errors.names = "Organization name can only contain letters and spaces"
         }
-        if (validator.isEmpty(data.gender)) {
-            errors.gender = 'This field is required'
+        if (data.names.length<=2) {
+            errors.names = "Organization name must have more than 2 letters"
         }
-        if (validator.isEmpty(data.dob)) {
-            errors.dob = 'This field is required'
+        if (validator.isEmpty(data.email)) {
+            errors.email = 'This field is required'
+        }
+        if (!validator.isEmail(data.email)) {
+            errors.email = 'You must provide a valid email format, eg. example@example.com'
+        }
+        if (!data.cellphone) {
+            errors.cellphone = 'This field is required'
+        }
+        if (data.cellphone.length<10||data.cellphone.length>10) {
+            errors.cellphone = 'Phone number must be 10 numbers'
         }
         return {
             errors,
@@ -98,21 +104,18 @@ class Individual extends Component {
 
     onSubmit(e) {
         e.preventDefault()
-        // if (this.isInfoValid()) {
+        if (this.isInfoValid()) {
         const defendant = {
             type: this.state.type,
             names: this.state.names,
             cellphone: this.state.cellphone,
-            location: this.state.location,
-            postal_address: this.state.postal_address,
+            email: this.state.email,
         }
         localStorage.setItem("Defendant", JSON.stringify({view: 'individual', defendant: defendant}))
         localStorage.setItem("view", "defendant")
-
         this.setState({errors: {}, isLoading: true})
         this.props.toForms()
-
-        // }
+        }
     }
 
     onChange(e) {
@@ -122,17 +125,15 @@ class Individual extends Component {
     render() {
 
         const {
-            errors, isLoading, invalid, practice_number, names, first_name, location, dob, gender, password, passwordConfirmation, message, postal_address, cellphone
+            errors, isLoading, invalid, names,  message, email, cellphone
         } = this.state
 
         return (
 
             <form onSubmit={this.onSubmit}>
                 {message && <div className="alert alert-success">{message}</div>}
-
-
                 <TextFieldGroup
-                    label="Names"
+                    label="Full names"
                     type="text"
                     name="names"
                     value={names}
@@ -141,21 +142,12 @@ class Individual extends Component {
                 />
 
                 <TextFieldGroup
-                    label="Location"
-                    type="text"
-                    name="location"
-                    value={location}
+                    label="Email"
+                    type="email"
+                    name="email"
+                    value={email}
                     onChange={this.onChange}
-                    error={errors.location}
-                />
-
-                <TextFieldGroup
-                    label="Postal address"
-                    type="text"
-                    name="postal_address"
-                    value={postal_address}
-                    onChange={this.onChange}
-                    error={errors.postal_address}
+                    error={errors.email}
                 />
                 <TextFieldGroup
                     label="Phone number"

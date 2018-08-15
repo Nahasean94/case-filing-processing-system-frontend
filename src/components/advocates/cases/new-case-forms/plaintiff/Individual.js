@@ -12,7 +12,6 @@ class Individual extends Component {
         this.state = {
             type: 'individual',
             names: '',
-            post_address: '',
             dob: '',
             gender: '',
             message: '',
@@ -34,7 +33,6 @@ class Individual extends Component {
                 this.state.cellphone = individual.cellphone
                 this.state.email = individual.email
                 this.state.dob = individual.dob
-                this.state.post_address = individual.post_address
             }
         }
     }
@@ -71,12 +69,20 @@ class Individual extends Component {
 
     validateInfo(data) {
         let errors = {}
-        if (!data.practice_number) {
-            errors.practice_number = 'This field is required'
+        if (validator.isEmpty(data.names)) {
+            errors.names = 'This field is required'
         }
-
-        if (validator.isEmpty(data.post_address)) {
-            errors.post_address = 'This field is required'
+        if (!data.names.match(/[\sa-zA-Z]/g)) {
+            errors.names = "Names can only contain letters and spaces"
+        }
+        if (data.names.split(" ").length<2) {
+            errors.names = "You must provide at least 2 names"
+        }
+        if (validator.isEmpty(data.email)) {
+            errors.email = 'This field is required'
+        }
+        if (!validator.isEmail(data.email)) {
+            errors.email = 'You must provide a valid email format, eg. example@example.com'
         }
         if (validator.isEmpty(data.gender)) {
             errors.gender = 'This field is required'
@@ -84,6 +90,19 @@ class Individual extends Component {
         if (validator.isEmpty(data.dob)) {
             errors.dob = 'This field is required'
         }
+        if (Date.parse(data.dob) > Date.parse(new Date('2013'))) {
+            errors.dob = "The plaintiff must be 5 and above"
+        }
+        if (Date.parse(data.dob) > Date.parse(new Date())) {
+            errors.dob = "The plaintiff cannot be born in the future"
+        }
+        if (!data.cellphone) {
+            errors.cellphone = 'This field is required'
+        }
+        if (data.cellphone.length<10||data.cellphone.length>10) {
+            errors.cellphone = 'Phone number must be 10 numbers'
+        }
+
         return {
             errors,
             isValid: isEmpty(errors)
@@ -102,7 +121,7 @@ class Individual extends Component {
 
     onSubmit(e) {
         e.preventDefault()
-        // if (this.isInfoValid()) {
+        if (this.isInfoValid()) {
         const plaintiff = {
             type: this.state.type,
             names: this.state.names,
@@ -110,13 +129,12 @@ class Individual extends Component {
             email: this.state.email,
             gender: this.state.gender,
             dob: this.state.dob,
-            post_address: this.state.post_address,
         }
         localStorage.setItem("Plaintiff", JSON.stringify({view: 'individual', plaintiff: plaintiff}))
         localStorage.setItem("view", "plaintiff")
         this.setState({errors: {}, isLoading: true})
         this.props.toDefendant()
-        // }
+        }
     }
 
     onChange(e) {
@@ -126,7 +144,7 @@ class Individual extends Component {
     render() {
 
         const {
-            errors, isLoading, invalid, names,  post_address, dob, gender, message, email, cellphone
+            errors, isLoading, invalid, names, post_address, dob, gender, message, email, cellphone
         } = this.state
 
         return (
@@ -136,21 +154,12 @@ class Individual extends Component {
 
 
                 <TextFieldGroup
-                    label="Names"
+                    label="Full bames"
                     type="text"
                     name="names"
                     value={names}
                     onChange={this.onChange}
                     error={errors.names}
-                />
-
-                <TextFieldGroup
-                    label="PO Box"
-                    type="text"
-                    name="post_address"
-                    value={post_address}
-                    onChange={this.onChange}
-                    error={errors.post_address}
                 />
 
                 <TextFieldGroup

@@ -14,7 +14,6 @@ class Organization extends Component {
             name: '',
             email: '',
             cellphone: '',
-            post_address: '',
             errors: {},
             isLoading: false,
             invalid: false,
@@ -28,15 +27,13 @@ class Organization extends Component {
             if (organization.type === 'organization') {
                 this.state.name = organization.name
                 this.state.email = organization.email
-                this.state.post_address = organization.post_address
-                this.state.post_address = organization.post_address
+                this.state.cellphone = organization.cellphone
             }
         }
 
     }
 
     checkAdvocateExists(e) {
-        console.log("checking")
         if (this.state.practice_number) {
             this.props.graphql
                 .query({
@@ -67,15 +64,28 @@ class Organization extends Component {
 
     valiemailInfo(data) {
         let errors = {}
-        if (!data.practice_number) {
-            errors.practice_number = 'This field is required'
+        if (validator.isEmpty(data.name)) {
+            errors.name = 'This field is required'
         }
-        if (validator.isEmpty(data.gender)) {
-            errors.gender = 'This field is required'
+        if (!data.name.match(/[\a-zA-Z]/g)) {
+            errors.name = "Organization name can only contain letters and spaces"
+        }
+        if (data.name.length<=2) {
+            errors.name = "Organization name must have more than 2 letters"
         }
         if (validator.isEmpty(data.email)) {
             errors.email = 'This field is required'
         }
+        if (!validator.isEmail(data.email)) {
+            errors.email = 'You must provide a valid email format, eg. example@example.com'
+        }
+        if (!data.cellphone) {
+            errors.cellphone = 'This field is required'
+        }
+        if (data.cellphone.length<10||data.cellphone.length>10) {
+            errors.cellphone = 'Phone number must be 10 numbers'
+        }
+
         return {
             errors,
             isValid: isEmpty(errors)
@@ -94,20 +104,19 @@ class Organization extends Component {
 
     onSubmit(e) {
         e.preventDefault()
-        // if (this.isInfoValid()) {
+        if (this.isInfoValid()) {
         const plaintiff = {
             type: this.state.type,
             name: this.state.name,
             cellphone: this.state.cellphone,
             email: this.state.email,
-            post_address: this.state.post_address,
         }
         localStorage.setItem("Plaintiff", JSON.stringify({view: 'organization', plaintiff: plaintiff}))
         localStorage.setItem("view", "plaintiff")
         this.setState({errors: {}, isLoading: true})
         this.props.toDefendant()
 
-        // }
+        }
     }
 
     onChange(e) {
@@ -117,7 +126,7 @@ class Organization extends Component {
     render() {
 
         const {
-            errors, isLoading, invalid, name, post_address, email, message, cellphone
+            errors, isLoading, invalid, name, email, message, cellphone
         } = this.state
 
         return (
@@ -126,7 +135,7 @@ class Organization extends Component {
                 {message && <div className="alert alert-success">{message}</div>}
 
                 <TextFieldGroup
-                    label="Names"
+                    label="Name"
                     type="text"
                     name="name"
                     value={name}
@@ -134,14 +143,6 @@ class Organization extends Component {
                     error={errors.name}
                 />
 
-                <TextFieldGroup
-                    label="PO Box"
-                    type="text"
-                    name="post_address"
-                    value={post_address}
-                    onChange={this.onChange}
-                    error={errors.post_address}
-                />
                 <TextFieldGroup
                     label="Email"
                     type="email"
@@ -171,8 +172,8 @@ class Organization extends Component {
                                 onClick={this.onSubmit}>Next
                         </button>
                     </div>
-
                 </div>
+
             </form>
         )
     }

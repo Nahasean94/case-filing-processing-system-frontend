@@ -43,13 +43,13 @@ class CaseType extends React.Component {
     validateInput(data) {
         let errors = {}
 
-        if (!data.case_category.value) {
+        if (!data.case_category) {
             errors.case_category = 'This field is required'
         }
-        if (!data.case_type.value) {
+        if (!data.case_type) {
             errors.case_type = 'This field is required'
         }
-        if (!data.court_station.value) {
+        if (!data.court_station) {
             errors.court_station = 'This field is required'
         }
         return {
@@ -68,7 +68,7 @@ class CaseType extends React.Component {
 
     onSubmit(e) {
         e.preventDefault()
-        // if (this.isValid()) {
+        if (this.isValid()) {
         this.setState({errors: {}})
 
         const caseDescription = {
@@ -80,7 +80,7 @@ class CaseType extends React.Component {
         localStorage.setItem("view", "case-type")
 
         this.props.toCaseDescription()
-        // }
+        }
     }
 
     render() {

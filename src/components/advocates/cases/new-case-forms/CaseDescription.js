@@ -37,6 +37,18 @@ class CaseDescription extends Component {
         if (validator.isEmpty(data.title)) {
             errors.title = 'This field cannot be empty'
         }
+        if(data.title.length<3){
+            errors.title='Title must be at least 3 characters'
+        }
+        if(data.description.length<10){
+            errors.description='Description must be at least 10 characters'
+        }
+        if(!data.title.match(/[\sa-zA-Z]/g)){
+            errors.title="Title must contain letters"
+        }
+        if(!data.description.match(/[\sa-zA-Z]/g)){
+            errors.description="Description must contain characters"
+        }
         return {
             errors,
             isValid: isEmpty(errors)
@@ -54,7 +66,7 @@ class CaseDescription extends Component {
 
     onSubmit(e) {
         e.preventDefault()
-        // if (this.isValid()) {
+        if (this.isValid()) {
         const caseDescription = {
             title: this.state.title,
             description: this.state.description,
@@ -62,7 +74,7 @@ class CaseDescription extends Component {
         localStorage.setItem("CaseDescription", JSON.stringify(caseDescription))
         localStorage.setItem("view", "case-description")
             this.props.toPlaintiff()
-        // }
+        }
     }
 
 

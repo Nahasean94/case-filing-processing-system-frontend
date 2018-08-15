@@ -33,8 +33,11 @@ class Forms extends Component {
         if (validator.isEmpty(data.fact)) {
             errors.fact = 'This field is required'
         }
-        if (data.fact.length < 5) {
-            errors.fact = 'A fact cannot be less than 5 characters'
+        if (!data.fact.match(/[\a-zA-Z]/g)) {
+            errors.fact = "Fact must contain letters"
+        }
+        if (data.fact.length <= 2) {
+            errors.fact = "Fact cannot be less than 2 characters"
         }
         return {
             errors,
@@ -44,6 +47,26 @@ class Forms extends Component {
 
     isValid() {
         const {errors, isValid} = this.validateInput(this.state)
+        if (!isValid) {
+            this.setState({errors})
+        }
+        return isValid
+    }
+
+    validateForm() {
+        let errors = {}
+
+        if (this.props.facts.length === 0) {
+            errors.fact = 'You must provide at least one fact'
+        }
+        return {
+            errors,
+            isValid: isEmpty(errors)
+        }
+    }
+
+    isFormaValid() {
+        const {errors, isValid} = this.validateForm()
         if (!isValid) {
             this.setState({errors})
         }
@@ -62,10 +85,13 @@ class Forms extends Component {
         }
     };
 
-    onSave() {
-        this.props.toConfirm()
-        localStorage.setItem("Forms", JSON.stringify({form: this.state.form, facts: this.props.facts}))
-        localStorage.setItem("view", "forms")
+    onSave(e) {
+        e.preventDefault()
+        if (this.isFormaValid()) {
+            localStorage.setItem("Forms", JSON.stringify({form: this.state.form, facts: this.props.facts}))
+            localStorage.setItem("view", "forms")
+            this.props.toConfirm()
+        }
     }
 
     render() {

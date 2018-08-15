@@ -14,8 +14,7 @@ class Organization extends Component {
             type: 'organization',
             name: '',
             cellphone: '',
-            location: '',
-            postal_address: '',
+            email: '',
             errors: {},
             isLoading: false,
             invalid: false,
@@ -31,8 +30,7 @@ class Organization extends Component {
             if(organization.type==='organization'){
             this.state.name = organization.name
             this.state.cellphone = organization.cellphone
-            this.state.location = organization.location
-            this.state.postal_address = organization.postal_address
+            this.state.email = organization.email
             }
         }
 
@@ -69,18 +67,26 @@ class Organization extends Component {
 
     validateInfo(data) {
         let errors = {}
-        if (!data.practice_number) {
-            errors.practice_number = 'This field is required'
+        if (validator.isEmpty(data.name)) {
+            errors.name = 'This field is required'
         }
-
-        if (validator.isEmpty(data.location)) {
-            errors.location = 'This field is required'
+        if (!data.name.match(/[\a-zA-Z]/g)) {
+            errors.name = "Organization name can only contain letters and spaces"
         }
-        if (validator.isEmpty(data.gender)) {
-            errors.gender = 'This field is required'
+        if (data.name.length<=2) {
+            errors.name = "Organization name must have more than 2 letters"
         }
-        if (validator.isEmpty(data.dob)) {
-            errors.dob = 'This field is required'
+        if (validator.isEmpty(data.email)) {
+            errors.email = 'This field is required'
+        }
+        if (!validator.isEmail(data.email)) {
+            errors.email = 'You must provide a valid email format, eg. example@example.com'
+        }
+        if (!data.cellphone) {
+            errors.cellphone = 'This field is required'
+        }
+        if (data.cellphone.length<10||data.cellphone.length>10) {
+            errors.cellphone = 'Phone number must be 10 numbers'
         }
         return {
             errors,
@@ -100,20 +106,18 @@ class Organization extends Component {
 
     onSubmit(e) {
         e.preventDefault()
-        // if (this.isInfoValid()) {
+        if (this.isInfoValid()) {
         this.setState({errors: {}, isLoading: true})
         const defendant = {
             type: this.state.type,
             name: this.state.name,
             cellphone: this.state.cellphone,
-            location: this.state.location,
-            postal_address: this.state.postal_address,
+            email: this.state.email,
         }
         localStorage.setItem("Defendant", JSON.stringify({view: 'organization', defendant: defendant}))
         localStorage.setItem("view","defendant")
         this.props.toForms()
-
-        // }
+        }
     }
 
     onChange(e) {
@@ -123,7 +127,7 @@ class Organization extends Component {
     render() {
 
         const {
-            errors, isLoading, invalid, practice_number, name, first_name, location, dob, gender, password, passwordConfirmation, message, postal_address, cellphone
+            errors, isLoading, invalid,   name,  message, email, cellphone
         } = this.state
 
         return (
@@ -140,21 +144,12 @@ class Organization extends Component {
                 />
 
                 <TextFieldGroup
-                    label="Location"
-                    type="text"
-                    name="location"
-                    value={location}
+                    label="Email"
+                    type="email"
+                    name="email"
+                    value={email}
                     onChange={this.onChange}
-                    error={errors.location}
-                />
-
-                <TextFieldGroup
-                    label="Postal address"
-                    type="text"
-                    name="postal_address"
-                    value={postal_address}
-                    onChange={this.onChange}
-                    error={errors.postal_address}
+                    error={errors.email}
                 />
                 <TextFieldGroup
                     label="Phone number"
