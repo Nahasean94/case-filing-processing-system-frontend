@@ -90,7 +90,7 @@ class Individual extends Component {
         if (validator.isEmpty(data.dob)) {
             errors.dob = 'This field is required'
         }
-        if (Date.parse(data.dob) > Date.parse(new Date('2013'))) {
+        if (Date.parse(data.dob) > Date.parse(new Date('2000'))) {
             errors.dob = "The plaintiff must be 5 and above"
         }
         if (Date.parse(data.dob) > Date.parse(new Date())) {

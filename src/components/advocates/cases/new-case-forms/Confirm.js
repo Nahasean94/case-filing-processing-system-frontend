@@ -12,11 +12,7 @@ class Confirm extends Component {
     }
 
     addNewCase({case_types, case_description, defendant, plaint, plaintiff_type, form, transaction}) {
-        console.log("sdfsdf")
-        console.log(
-            "individual:", plaint
-        )
-
+        console.log(plaint)
         return this.props.graphql
             .query({
                 fetchOptionsOverride: fetchOptionsOverride,
@@ -32,7 +28,7 @@ class Confirm extends Component {
                         defendant_name: defendant.name,
                         defendant_email: defendant.email,
                         defendant_cellphone: defendant.cellphone,
-                        plaintiff: plaint.addIndividual.id,
+                        plaintiff: plaint.addIndividual?plaint.addIndividual.id:plaint.addOrganization.id,
                         plaintiff_type: plaintiff_type,
                         form: form.addNewForm.id,
                         payment: transaction.makePayment.id,
@@ -42,6 +38,7 @@ class Confirm extends Component {
             })
             .request.then(({data}) => {
                     if (data) {
+                        return data
                     }
                 }
             )
@@ -67,6 +64,7 @@ class Confirm extends Component {
                 })
                 .request.then(({data}) => {
                         if (data) {
+                            return data
                         }
                     }
                 )
@@ -137,7 +135,8 @@ class Confirm extends Component {
             )
     }
 
-    onSave() {
+    onSave(e) {
+        e.preventDefault()
         const case_types = JSON.parse(localStorage.getItem("CaseType"))
         const case_description = JSON.parse(localStorage.getItem("CaseDescription"))
         const plaintiff = JSON.parse(localStorage.getItem("Plaintiff")).plaintiff
@@ -201,4 +200,4 @@ Confirm.contextTypes = {
     router: PropTypes.object.isRequired
 }
 
-export default () => <Consumer>{graphql => <Confirm graphql={graphql}/>}</Consumer>
+export default ({toForms}) => <Consumer>{graphql => <Confirm graphql={graphql} toForms={toForms}/>}</Consumer>

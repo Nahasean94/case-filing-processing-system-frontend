@@ -31,8 +31,7 @@ class NewCase extends React.Component {
         this.toDefendant = this.toDefendant.bind(this)
         this.toForms = this.toForms.bind(this)
         this.toConfirm = this.toConfirm.bind(this)
-        this.onSubmit = this.onSubmit.bind(this)
-        this.submitForms = this.submitForms.bind(this)
+
         if (localStorage.getItem("view")) {
             const view = localStorage.getItem("view")
             if (view === 'case-type') {
@@ -60,7 +59,6 @@ class NewCase extends React.Component {
                 this.state.step = 6
             }
         }
-        console.log("constructor")
 
     }
 
@@ -69,17 +67,15 @@ class NewCase extends React.Component {
     }
 
     toCaseDescription() {
-        console.log("descrit")
         this.setState({progress: 20, step: 2, view: 'case-description'})
     }
 
     toPlaintiff() {
-        console.log("plaintiff")
+
         this.setState({progress: 40, step: 3, view: 'plaintiff'})
     }
 
     toDefendant() {
-        console.log("defendant")
         this.setState({progress: 60, step: 4, view: 'defendant'})
     }
 
@@ -119,13 +115,11 @@ class NewCase extends React.Component {
                         <Defendant toPlaintiff={this.toPlaintiff} toForms={this.toForms}/>
                     </div>}
                     {view === 'forms' && <div>
-                        <Complaint toDefendant={this.toDefendant} toConfirm={this.toConfirm}
-                                   onSubmit={this.submitForms}/>
+                        <Complaint toDefendant={this.toDefendant} toConfirm={this.toConfirm}/>
                     </div>}
                     {view === 'confirm' && <div>
                         <br/>
                         <Confirm toForms={this.toForms} toSave={this.onSubmit}/>
-
                     </div>}
 
                 </div>

@@ -275,6 +275,67 @@ makePayment(fee:$fee){
 id
 }
 }`
+const findCaseInfo = `
+query($id:ID!){
+findCaseInfo(id:$id){
+ id
+ title
+description
+case_number{
+  prefix
+  suffix
+ }
+plaintiff {
+    party_type
+    party_id
+    {
+id
+email
+cellphone
+name
+
+    }
+}
+defendant{
+    party_type
+    name
+    email
+    cellphone
+}
+court_station{
+    name
+}
+case_type {
+    name
+}
+case_category {
+   name
+}
+form{
+   name
+}
+payment {
+   fee
+}
+judge
+verdict{
+ruling
+date
+timestamp
+}
+timestamp
+registrar_approval
+advocate{
+    surname
+    first_name
+    last_name
+    practice_number
+    email
+cellphone
+}
+}
+}`
+
 
 const addNewCase = `
 mutation(
@@ -345,6 +406,7 @@ export {
     getCourtAssistant,
     getDeputyRegistrar,
     findPendingCases,
-    findCourtPendingCases
+    findCourtPendingCases,
+    findCaseInfo
 
 }
