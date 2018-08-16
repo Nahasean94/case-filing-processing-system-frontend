@@ -38,6 +38,12 @@ class AdminSignupForm extends Component {
         if (validator.isEmpty(data.password)) {
             errors.password = 'This field is required'
         }
+        if (data.password.length<6) {
+            errors.password = 'Password must be at least 6 characters'
+        }
+        // if (data.password.match(/[a-zA-Z0-9\s\&]/)) {
+        //     errors.password = 'Password must be at least 6 characters'
+        // }
         if (validator.isEmpty(data.passwordConfirmation)) {
             errors.passwordConfirmation = 'This field is required'
         }

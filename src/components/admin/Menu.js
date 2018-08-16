@@ -46,15 +46,15 @@ export default ({router, active}) => {
         <NavItem>
             <NavLink href="" onClick={onCaseTypeLink} active={active === 'case-types'}>Case types</NavLink>
         </NavItem>
-        <NavItem>
-            <NavLink href="" onClick={onAdvocatesLink} active={active === 'advocates'}>Advocates</NavLink>
-        </NavItem>
-        <NavItem>
-            <NavLink href="" onClick={onCourtAssistantsLink} active={active === 'court-assistants'}>Court assistants</NavLink>
-        </NavItem>
-        <NavItem>
-            <NavLink href="" onClick={onDeputyRegistrarsLink} active={active === 'deputy-registrars'}>Deputy registrars</NavLink>
-        </NavItem>
+        {/*<NavItem>*/}
+            {/*<NavLink href="" onClick={onAdvocatesLink} active={active === 'advocates'}>Advocates</NavLink>*/}
+        {/*</NavItem>*/}
+        {/*<NavItem>*/}
+            {/*<NavLink href="" onClick={onCourtAssistantsLink} active={active === 'court-assistants'}>Court assistants</NavLink>*/}
+        {/*</NavItem>*/}
+        {/*<NavItem>*/}
+            {/*<NavLink href="" onClick={onDeputyRegistrarsLink} active={active === 'deputy-registrars'}>Deputy registrars</NavLink>*/}
+        {/*</NavItem>*/}
 
     </Nav>
 

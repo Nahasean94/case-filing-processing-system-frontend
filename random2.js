@@ -8,7 +8,7 @@ request(
         method: 'POST',
         url: url,
         json: {
-            "checkout_id": "ws_CO_DMZ_63298144_16082018011313778"
+            "checkout_id": "ws_CO_DMZ_63640639_16082018231156915"
         }
     },
     function (error, response, body) {

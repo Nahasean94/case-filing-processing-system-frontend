@@ -91,10 +91,13 @@ class SignupForm extends Component {
             errors.passwordConfirmation = 'Passwords must match'
         }
         if (Date.parse(data.dob) > Date.parse(new Date('2000'))) {
-            errors.dob = "A guard must be 18 and above"
+            errors.dob = "An advocate should be at least 18 years"
         }
         if (Date.parse(data.dob) < Date.parse(new Date('1956'))) {
             errors.dob = 'You should be retired by now'
+        }
+        if (Date.parse(data.dob)> Date.parse(new Date())) {
+            errors.dob = 'You cannot be born in the future'
         }
         return {
             errors,

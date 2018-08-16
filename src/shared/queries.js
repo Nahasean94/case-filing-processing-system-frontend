@@ -312,7 +312,10 @@ case_category {
    name
 }
 form{
+   type_of_form{
    name
+   }
+   path
 }
 payment {
    fee
@@ -331,7 +334,7 @@ advocate{
     last_name
     practice_number
     email
-cellphone
+    cellphone
 }
 }
 }`
@@ -376,7 +379,19 @@ name
 fee
 }
 }`
+const findServedCases = `
+query($prefix:Int!){
+findServedCases(prefix:$prefix){
+id
+title
+case_number{
+prefix
+suffix
+}
+}
+}`
 export {
+    findServedCases,
     findCaseForms,
     addNewCase,
     addNewForm,

@@ -163,12 +163,12 @@ class Confirm extends Component {
                         form,
                         transaction
                     }).then(addedCase => {
-                        // localStorage.removeItem("CaseType")
-                        // localStorage.removeItem("CaseDescription")
-                        // localStorage.removeItem("Plaintiff")
-                        // localStorage.removeItem("Defendant")
-                        // localStorage.removeItem("Forms")
-                        // localStorage.removeItem("view")
+                        localStorage.removeItem("CaseType")
+                        localStorage.removeItem("CaseDescription")
+                        localStorage.removeItem("Plaintiff")
+                        localStorage.removeItem("Defendant")
+                        localStorage.removeItem("Forms")
+                        localStorage.removeItem("view")
                         this.context.router.history.push('/advocates/dashboard/pending-cases')
                     })
 

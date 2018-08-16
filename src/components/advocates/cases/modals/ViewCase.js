@@ -1,6 +1,6 @@
 "use strict"
 import React, {Component} from 'react'
-import {findCaseInfo, getGuardContactInfo, getGuardInfo, getGuardPaymentInfo} from "../../../shared/queries"
+import {findCaseInfo, getGuardContactInfo, getGuardInfo, getGuardPaymentInfo} from "../../../../shared/queries"
 import {isEmpty} from "lodash"
 import classnames from "classnames"
 import PropTypes from "prop-types"
@@ -17,14 +17,14 @@ import {
     TabPane
 } from 'reactstrap'
 import jwt from "jsonwebtoken"
-import {fetchOptionsOverride} from "../../../shared/fetchOverrideOptions"
+import {fetchOptionsOverride} from "../../../../shared/fetchOverrideOptions"
 
 class ViewCase extends Component {
     constructor(props) {
         super(props)
         this.state = {
             activeTab: 'basic',
-            caseInfo: {},
+            caseInfo: '',
             loading: false,
             error: false,
         }
@@ -42,6 +42,8 @@ class ViewCase extends Component {
     }
 
     componentDidMount() {
+    console.log(this.props.id)
+if(this.props.id){
         const token = jwt.decode(localStorage.getItem("CourtSystem"))
         this.props.graphql
             .query({
@@ -68,13 +70,14 @@ class ViewCase extends Component {
                 }
             }
         )
+}
     }
 
     render() {
         const {show, onClose} = this.props
         const {id, title, description, case_number, plaintiff, defendant, court_station, case_type, case_category, form, payment, judge, verdict, timestamp, registrar_approval, advocate} = this.state.caseInfo
-        if (show) {
-
+        console.log(this.state.caseInfo)
+        if (show && this.state.caseInfo) {
             return (
                 <Modal isOpen={show} toggle={onClose} size="lg" className="modal-dialog modal-dialog-centered">
                     <ModalHeader toggle={onClose}>View Case</ModalHeader>

@@ -22,9 +22,9 @@ export default ({router, active}) => {
         <NavItem>
             <NavLink href="" onClick={onPendingCasesLink} active={active === 'pending-cases'}>Pending cases</NavLink>
         </NavItem>
-        <NavItem>
-            <NavLink href="" onClick={onServedCasesLink} active={active === 'served-cases'}>Served cases</NavLink>
-        </NavItem>
+        {/*<NavItem>*/}
+            {/*<NavLink href="" onClick={onServedCasesLink} active={active === 'served-cases'}>Served cases</NavLink>*/}
+        {/*</NavItem>*/}
         <NavItem>
             <NavLink href="" onClick={onCompleteCasesLink} active={active === 'completed-cases'}>Complete cases</NavLink>
         </NavItem>

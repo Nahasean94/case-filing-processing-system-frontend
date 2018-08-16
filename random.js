@@ -8,7 +8,12 @@ var date = new Date();
 const timestamp= date.getFullYear().toString() + pad2(date.getMonth() + 1) + pad2( date.getDate()) + pad2( date.getHours() ) + pad2( date.getMinutes() ) + pad2( date.getSeconds() )
 
 const password = btoa(174379 + "bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919" + timestamp)
-const auth = "Bearer C3p7n9hVbUOtzrGeA5etNSTmz1KN"
+
+
+const auth = "Bearer BYfHAo1gBAVu9OKPuxXQvGknISWc"
+
+
+
 const url = "https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest"
 request(
     {

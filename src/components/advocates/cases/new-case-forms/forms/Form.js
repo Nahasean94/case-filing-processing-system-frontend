@@ -7,12 +7,12 @@ class Form extends React.Component {
             file: '',
             form:this.props.form
         }
-       this.handleProfilePicture=this.handleProfilePicture.bind(this)
+       this.handleFormChange=this.handleFormChange.bind(this)
        this.onSelectDialog=this.onSelectDialog.bind(this)
     }
 
 
-    handleProfilePicture({
+    handleFormChange({
                              target: {
                                  validity,
                                  files: [file]
@@ -40,7 +40,7 @@ class Form extends React.Component {
                 <td>{file_name}</td>
                 <td>
                     <input type="file" id="myFileInput" name="upload" style={{display: 'none'}}
-                           onChange={this.handleProfilePicture}
+                           onChange={this.handleFormChange}
                            accept="application/pdf" />
                     <button className="btn btn-sm btn-dark" onClick={this.onSelectDialog}><span><i className="fa fa-file"></i></span></button>
                 </td>

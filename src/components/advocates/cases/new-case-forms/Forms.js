@@ -8,7 +8,6 @@ import {fetchOptionsOverride} from "../../../../shared/fetchOverrideOptions"
 import {findCaseForms} from "../../../../shared/queries"
 import Select from 'react-select'
 import Form from "./forms/Form"
-import jwt from "jsonwebtoken"
 import ProceedToPay from "./forms/ProceedToPay"
 
 let caseFormOptions
@@ -19,11 +18,11 @@ class Forms extends Component {
         this.state = {
             form: '',
             forms: '',
-            payable:false,
+            payable: false,
             errors: {},
-            paid:false,
-            confirmed:false,
-            showProceedToPay:false
+            paid: false,
+            confirmed: false,
+            showProceedToPay: false
         }
         // if (localStorage.getItem("Forms")) {
         //     const forms = JSON.parse(localStorage.getItem("Forms"))
@@ -39,11 +38,13 @@ class Forms extends Component {
         this.isPayable = this.isPayable.bind(this)
 
     }
-    showProceedToPay(){
-        this.setState({showProceedToPay:true})
+
+    showProceedToPay() {
+        this.setState({showProceedToPay: true})
     }
-    closeProceedToPay(){
-        this.setState({showProceedToPay:false})
+
+    closeProceedToPay() {
+        this.setState({showProceedToPay: false})
     }
 
     validateInput(data) {
@@ -95,7 +96,10 @@ class Forms extends Component {
     handleCaseFormChange(forms) {
         this.setState({forms})
         this.props.clearForms()
-            this.props.addForm(forms)
+        forms.map(form => {
+            this.props.addForm(form)
+
+        })
 
 
     }
@@ -107,8 +111,9 @@ class Forms extends Component {
             this.props.addForm(this.state.form)
         }
     };
+
     isPayable(e) {
-        this.setState({payable:true})
+        this.setState({payable: true})
     };
 
     onSave(e) {
@@ -140,7 +145,7 @@ class Forms extends Component {
                                 value: case_form.id
                             }
                         })
-                            this.setState({loading: false, error: false})
+                        this.setState({loading: false, error: false})
                     }
                 }
                 if (loading) {
@@ -160,10 +165,10 @@ class Forms extends Component {
         return (
             <div>
                 <div className="form-group row">
-                    <label className="col-sm-3 col-form-label">Case type</label>
+                    <label className="col-sm-3 col-form-label">Attachments</label>
                     <div className="col-sm-9">
                         <Select
-
+                            multi={true}
                             closeOnSelect={true}
                             onChange={this.handleCaseFormChange}
                             options={caseFormOptions}
@@ -185,18 +190,23 @@ class Forms extends Component {
                     </thead>
                     <tbody>
                     {forms.map(form => {
-                        totals = totals + Number(form.fee)
-                        console.log(form)
-                        return <Form form={form} onFile={this.props.onFile} onSelectFile={this.props.updateForm} isPayable={this.isPayable}/>
+                        if (form.fee) {
+
+                            totals = totals + Number(form.fee)
+                        }
+                        return <Form form={form} onFile={this.props.onFile} onSelectFile={this.props.updateForm}
+                                     isPayable={this.isPayable}/>
                     })}
                     <tr>
                         <td><h4>Totals</h4></td>
                         <td><h4>{totals} </h4></td>
                         <td>
-                            <button className="btn btn-sm btn-info" onClick={this.showProceedToPay} disabled={!this.state.payable}><span><i className="fa fa-money"></i></span> Proceed
+                            <button className="btn btn-sm btn-info" onClick={this.showProceedToPay}
+                                    disabled={!this.state.payable}><span><i className="fa fa-money"></i></span> Proceed
                                 to pay
                             </button>
-                            <ProceedToPay show={this.state.showProceedToPay} amount={totals} onClose={this.closeProceedToPay}/>
+                            <ProceedToPay show={this.state.showProceedToPay} amount={totals}
+                                          onClose={this.closeProceedToPay}/>
                         </td>
                         <td>
                             <button className="btn btn-sm btn-success" disabled={!this.state.paid}>Confirm payment
