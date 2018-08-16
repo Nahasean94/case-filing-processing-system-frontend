@@ -4,15 +4,21 @@ import {addIndividual, addNewCase, addNewForm, addOrganization, makePayment,} fr
 import {Consumer} from 'graphql-react'
 import PropTypes from "prop-types"
 import Home from "../../../Home"
+import StaticFile from "./forms/StaticFile"
 
 class Confirm extends Component {
     constructor(props) {
         super(props)
         this.onSave = this.onSave.bind(this)
+
+        this.addNewPlaintiff=this.addNewPlaintiff.bind(this)
+        this.makePayment=this.makePayment.bind(this)
+        this.addNewForm=this.addNewForm.bind(this)
+        console.log(this.props.file)
+
     }
 
     addNewCase({case_types, case_description, defendant, plaint, plaintiff_type, form, transaction}) {
-        console.log(plaint)
         return this.props.graphql
             .query({
                 fetchOptionsOverride: fetchOptionsOverride,
@@ -47,7 +53,6 @@ class Confirm extends Component {
     }
 
     addNewPlaintiff(data) {
-        console.log(data)
         if (data.type === 'organization') {
             return this.props.graphql
                 .query({
@@ -115,20 +120,22 @@ class Confirm extends Component {
     }
 
     async addNewForm(data) {
+        console.log(StaticFile.getFile())
         return await this.props.graphql
             .query({
                 fetchOptionsOverride: fetchOptionsOverride,
                 resetOnLoad: true,
                 operation: {
                     variables: {
-                        type_of_form: data.form,
-                        facts: data.facts,
+                        type_of_form: data.form[0].value,
+                        file:StaticFile.getFile(),
                     },
                     query: addNewForm
                 }
             })
             .request.then(({data}) => {
                     if (data) {
+                        console.log(data)
                         return data
                     }
                 }
@@ -142,6 +149,7 @@ class Confirm extends Component {
         const plaintiff = JSON.parse(localStorage.getItem("Plaintiff")).plaintiff
         const defendant = JSON.parse(localStorage.getItem("Defendant")).defendant
         const forms = JSON.parse(localStorage.getItem("Forms"))
+
         return this.addNewForm(forms).then(async form => {
             return await this.makePayment().then(async transaction => {
                 return await this.addNewPlaintiff(plaintiff).then(async plaint => {
@@ -155,12 +163,12 @@ class Confirm extends Component {
                         form,
                         transaction
                     }).then(addedCase => {
-                        localStorage.removeItem("CaseType")
-                        localStorage.removeItem("CaseDescription")
-                        localStorage.removeItem("Plaintiff")
-                        localStorage.removeItem("Defendant")
-                        localStorage.removeItem("Forms")
-                        localStorage.removeItem("view")
+                        // localStorage.removeItem("CaseType")
+                        // localStorage.removeItem("CaseDescription")
+                        // localStorage.removeItem("Plaintiff")
+                        // localStorage.removeItem("Defendant")
+                        // localStorage.removeItem("Forms")
+                        // localStorage.removeItem("view")
                         this.context.router.history.push('/advocates/dashboard/pending-cases')
                     })
 

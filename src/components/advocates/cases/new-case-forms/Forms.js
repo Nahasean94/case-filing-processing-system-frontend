@@ -1,43 +1,62 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {addFact, clearFacts, deleteFact, updateFact} from "../../../../actions/factActions"
-import TextFieldGroup from "../../../../shared/TextFieldsGroup"
+import {addForm, clearForms, deleteForm, updateForm} from "../../../../actions/formActions"
 import validator from "validator"
 import {isEmpty} from "lodash"
 import PropTypes from 'prop-types'
+import {fetchOptionsOverride} from "../../../../shared/fetchOverrideOptions"
+import {findCaseForms} from "../../../../shared/queries"
+import Select from 'react-select'
+import Form from "./forms/Form"
+import jwt from "jsonwebtoken"
+import ProceedToPay from "./forms/ProceedToPay"
 
+let caseFormOptions
 
 class Forms extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            fact: '',
-            form: '5b7274f27bb873209c99905b',
+            form: '',
+            forms: '',
+            payable:false,
             errors: {},
+            paid:false,
+            confirmed:false,
+            showProceedToPay:false
         }
-        if (localStorage.getItem("Forms")) {
-            const forms = JSON.parse(localStorage.getItem("Forms"))
-            this.props.clearFacts()
-            forms.facts.map(fact => this.props.addFact(fact))
-        }
+        // if (localStorage.getItem("Forms")) {
+        //     const forms = JSON.parse(localStorage.getItem("Forms"))
+        //     this.props.clearForms()
+        //     forms.forms.map(form => this.props.addForm(form))
+        // }
 
         this.onSubmit = this.onSubmit.bind(this)
-        this.onChange = this.onChange.bind(this)
+        this.handleCaseFormChange = this.handleCaseFormChange.bind(this)
+        this.showProceedToPay = this.showProceedToPay.bind(this)
+        this.closeProceedToPay = this.closeProceedToPay.bind(this)
         this.onSave = this.onSave.bind(this)
+        this.isPayable = this.isPayable.bind(this)
 
+    }
+    showProceedToPay(){
+        this.setState({showProceedToPay:true})
+    }
+    closeProceedToPay(){
+        this.setState({showProceedToPay:false})
     }
 
     validateInput(data) {
         let errors = {}
 
-        if (validator.isEmpty(data.fact)) {
-            errors.fact = 'This field is required'
+        if (validator.isEmpty(data.form)) {
+            errors.form = 'This field is required'
         }
-        if (!data.fact.match(/[\a-zA-Z]/g)) {
-            errors.fact = "Fact must contain letters"
+        if (!data.form.match(/[\a-zA-Z]/g)) {
+            errors.form = "Form must contain letters"
         }
-        if (data.fact.length <= 2) {
-            errors.fact = "Fact cannot be less than 2 characters"
+        if (data.form.length <= 2) {
+            errors.form = "Form cannot be less than 2 characters"
         }
         return {
             errors,
@@ -56,8 +75,8 @@ class Forms extends Component {
     validateForm() {
         let errors = {}
 
-        if (this.props.facts.length === 0) {
-            errors.fact = 'You must provide at least one fact'
+        if (this.props.forms.length === 0) {
+            errors.form = 'You must provide at least one form'
         }
         return {
             errors,
@@ -73,48 +92,122 @@ class Forms extends Component {
         return isValid
     }
 
-    onChange(e) {
-        this.setState({[e.target.name]: e.target.value})
+    handleCaseFormChange(forms) {
+        this.setState({forms})
+        this.props.clearForms()
+            this.props.addForm(forms)
+
+
     }
 
     onSubmit(e) {
         e.preventDefault()
         if (this.isValid()) {
-            this.setState({fact: '', errors: {}})
-            this.props.addFact(this.state.fact)
+            this.setState({form: '', errors: {}})
+            this.props.addForm(this.state.form)
         }
+    };
+    isPayable(e) {
+        this.setState({payable:true})
     };
 
     onSave(e) {
         e.preventDefault()
         if (this.isFormaValid()) {
-            localStorage.setItem("Forms", JSON.stringify({form: this.state.form, facts: this.props.facts}))
+            localStorage.setItem("Forms", JSON.stringify({form: this.props.forms}))
             localStorage.setItem("view", "forms")
             this.props.toConfirm()
         }
     }
 
+    componentDidMount() {
+        this.props.graphql
+            .query({
+                fetchOptionsOverride: fetchOptionsOverride,
+                resetOnLoad: true,
+                operation: {
+                    query: findCaseForms
+                }
+            })
+            .request.then(({data, loading, error}) => {
+                if (data) {
+                    if (data.findCaseForms) {
+                        caseFormOptions = data.findCaseForms.map(case_form => {
+                            return {
+                                label: case_form.name,
+                                fee: case_form.fee,
+                                name: case_form.name,
+                                value: case_form.id
+                            }
+                        })
+                            this.setState({loading: false, error: false})
+                    }
+                }
+                if (loading) {
+                    this.setState({loading: true, error: false})
+                }
+                if (error) {
+                    this.setState({loading: false, error: true})
+                }
+            }
+        )
+    }
+
     render() {
-        const {facts} = this.props
-        const {fact, errors} = this.state
+        const {forms} = this.props
+        const {form, errors} = this.state
+        let totals = 0
         return (
             <div>
-                <form onSubmit={this.onSubmit}>
-                    <p>Press enter to add</p>
-                    <TextFieldGroup
-                        label="Fact"
-                        type="text"
-                        name="fact"
-                        value={fact}
-                        onChange={this.onChange}
-                        error={errors.fact}
-                    />
-                </form>
-                <ol>
-                    {facts.map(fact => {
-                        return <li>{fact}</li>
+                <div className="form-group row">
+                    <label className="col-sm-3 col-form-label">Case type</label>
+                    <div className="col-sm-9">
+                        <Select
+
+                            closeOnSelect={true}
+                            onChange={this.handleCaseFormChange}
+                            options={caseFormOptions}
+                            placeholder="Search Case forms"
+                            removeSelected={true}
+                            value={this.state.forms}/>
+
+                    </div>
+                </div>
+                <hr/>
+                <table className="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">Form</th>
+                        <th scope="col">Fee</th>
+                        <th scope="col">File</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {forms.map(form => {
+                        totals = totals + Number(form.fee)
+                        console.log(form)
+                        return <Form form={form} onFile={this.props.onFile} onSelectFile={this.props.updateForm} isPayable={this.isPayable}/>
                     })}
-                </ol>
+                    <tr>
+                        <td><h4>Totals</h4></td>
+                        <td><h4>{totals} </h4></td>
+                        <td>
+                            <button className="btn btn-sm btn-info" onClick={this.showProceedToPay} disabled={!this.state.payable}><span><i className="fa fa-money"></i></span> Proceed
+                                to pay
+                            </button>
+                            <ProceedToPay show={this.state.showProceedToPay} amount={totals} onClose={this.closeProceedToPay}/>
+                        </td>
+                        <td>
+                            <button className="btn btn-sm btn-success" disabled={!this.state.paid}>Confirm payment
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <br/>
+                <br/>
+
                 <hr/>
                 <div className="form-group row">
                     <div className="col-sm-4 offset-sm-3">
@@ -136,16 +229,16 @@ class Forms extends Component {
 Forms.propTypes = {
     toConfirm: PropTypes.func.isRequired,
     toDefendant: PropTypes.func.isRequired,
-    updateFact: PropTypes.func.isRequired,
-    addFact: PropTypes.func.isRequired,
-    deleteFact: PropTypes.func.isRequired,
-    clearFacts: PropTypes.func.isRequired,
+    updateForm: PropTypes.func.isRequired,
+    addForm: PropTypes.func.isRequired,
+    deleteForm: PropTypes.func.isRequired,
+    clearForms: PropTypes.func.isRequired,
     onSubmit: PropTypes.func.isRequired,
-    facts: PropTypes.array.isRequired,
+    forms: PropTypes.array.isRequired,
 }
 
 function mapStateToProps(state) {
-    return {facts: state.factReducers}
+    return {forms: state.formReducers}
 }
 
-export default connect(mapStateToProps, {addFact, updateFact, deleteFact, clearFacts})(Forms)
+export default connect(mapStateToProps, {addForm, updateForm, deleteForm, clearForms})(Forms)

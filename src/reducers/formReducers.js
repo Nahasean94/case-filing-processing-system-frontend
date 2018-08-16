@@ -1,19 +1,20 @@
-import {ADD_FACT, CLEAR_FACTS, UPDATE_FACT,DELETE_FACT} from "../actions/types"
+import {ADD_FORM, CLEAR_FORMS, UPDATE_FORM,DELETE_FORM} from "../actions/types"
 
 export default (state = [], action = {}) => {
     switch (action.type) {
-        case ADD_FACT:
+        case ADD_FORM:
             return [...state,action.payload]
-        case CLEAR_FACTS:
+        case CLEAR_FORMS:
             return []
-        case UPDATE_FACT:
+        case UPDATE_FORM:
             return state.map(fact => {
-                if (fact === action.payload) {
+                console.log(action.payload,fact.value)
+                if (fact.value === action.payload.value) {
                     return action.payload
                 }
                 return fact
             })
-        case DELETE_FACT:
+        case DELETE_FORM:
             return [...[...state.slice(0, state.indexOf(action.payload)), ...state.slice(state.indexOf(action.payload) + 1)]]
 
         default:

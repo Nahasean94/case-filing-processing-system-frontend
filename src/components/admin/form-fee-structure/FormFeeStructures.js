@@ -108,6 +108,7 @@ class FormFeeStructures extends React.Component {
                     if (data) {
                         this.setState({
                             name: '',
+                            fee:0,
                             errors: {},
                             isLoading: false,
                             invalid: false,
@@ -200,7 +201,7 @@ class FormFeeStructures extends React.Component {
                             </div>
                             <div className="col-md-5">
                                 <CustomFieldGroup
-                                    label="Fee"
+                                    label="Fee (KES)"
                                     type="number"
                                     name="fee"
                                     value={this.state.fee}

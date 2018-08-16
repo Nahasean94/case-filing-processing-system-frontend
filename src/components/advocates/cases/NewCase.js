@@ -6,13 +6,15 @@ import CaseType from "./new-case-forms/CaseType"
 import CaseDescription from "./new-case-forms/CaseDescription"
 import Plaintiff from "./new-case-forms/Plaintiff"
 import Defendant from "./new-case-forms/Defendant"
-import Complaint from "./new-case-forms/Forms"
+import Forms from "./new-case-forms/Forms"
 import Confirm from "./new-case-forms/Confirm"
+import {Consumer} from 'graphql-react'
 
 class NewCase extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
+            file:'',
             progress: 0,
             step: 1,
             case_type: {},
@@ -31,6 +33,7 @@ class NewCase extends React.Component {
         this.toDefendant = this.toDefendant.bind(this)
         this.toForms = this.toForms.bind(this)
         this.toConfirm = this.toConfirm.bind(this)
+        this.onFile = this.onFile.bind(this)
 
         if (localStorage.getItem("view")) {
             const view = localStorage.getItem("view")
@@ -86,6 +89,10 @@ class NewCase extends React.Component {
     toConfirm() {
         this.setState({progress: 100, step: 6, view: 'confirm'})
     }
+    onFile(file){
+        console.log("on file")
+        this.setState({file})
+    }
 
 
 
@@ -115,11 +122,11 @@ class NewCase extends React.Component {
                         <Defendant toPlaintiff={this.toPlaintiff} toForms={this.toForms}/>
                     </div>}
                     {view === 'forms' && <div>
-                        <Complaint toDefendant={this.toDefendant} toConfirm={this.toConfirm}/>
+                        <Consumer>{graphql=> <Forms graphql={graphql}  toDefendant={this.toDefendant} toConfirm={this.toConfirm} onFile={this.onFile}/>}</Consumer>
                     </div>}
                     {view === 'confirm' && <div>
                         <br/>
-                        <Confirm toForms={this.toForms} toSave={this.onSubmit}/>
+                        <Confirm toForms={this.toForms} toSave={this.onSubmit} file={this.state.file}/>
                     </div>}
 
                 </div>

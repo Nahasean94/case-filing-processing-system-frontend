@@ -252,8 +252,8 @@ date
 }
 }`
 const addNewForm = `
-mutation($type_of_form:ID!,$facts:[String!]!){
-addNewForm(type_of_form:$type_of_form,facts:$facts){
+mutation($type_of_form:ID!,$file:Upload!){
+addNewForm(type_of_form:$type_of_form,file:$file){
 id
 }
 }`
@@ -368,8 +368,16 @@ payment:$payment){
 id
 }
 }`
-
+const findCaseForms = `
+{
+findCaseForms{
+id
+name
+fee
+}
+}`
 export {
+    findCaseForms,
     addNewCase,
     addNewForm,
     makePayment,

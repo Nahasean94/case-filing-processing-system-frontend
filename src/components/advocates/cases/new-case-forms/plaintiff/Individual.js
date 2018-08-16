@@ -91,7 +91,7 @@ class Individual extends Component {
             errors.dob = 'This field is required'
         }
         if (Date.parse(data.dob) > Date.parse(new Date('2000'))) {
-            errors.dob = "The plaintiff must be 5 and above"
+            errors.dob = "The plaintiff must be 18 and above"
         }
         if (Date.parse(data.dob) > Date.parse(new Date())) {
             errors.dob = "The plaintiff cannot be born in the future"
