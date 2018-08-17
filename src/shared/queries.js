@@ -301,6 +301,10 @@ defendant{
     name
     email
     cellphone
+    served{
+    text
+    timestamp
+    }
 }
 court_station{
     name
@@ -415,7 +419,150 @@ checkout_id
 }
 }`
 
+const serveDefendant = `
+mutation($id:ID!,$message:String!){
+serveDefendant(id:$id,message:$message){
+ id
+ title
+description
+case_number{
+  prefix
+  suffix
+ }
+plaintiff {
+    party_type
+    party_id
+    {
+id
+email
+cellphone
+name
+
+    }
+}
+defendant{
+    party_type
+    name
+    email
+    cellphone
+    served{
+    text
+    timestamp
+    }
+}
+court_station{
+    name
+}
+case_type {
+    name
+}
+case_category {
+   name
+}
+form{
+   type_of_form{
+   name
+   }
+   path
+}
+payment {
+   fee
+}
+judge
+verdict{
+ruling
+date
+timestamp
+}
+timestamp
+registrar_approval
+advocate{
+    surname
+    first_name
+    last_name
+    practice_number
+    email
+    cellphone
+}
+
+}
+}`
+const addHearingInfo= `
+mutation($id:ID!,$date:String!,$judge:String!){
+addHearingInfo(id:$id,date:$date,judge:$judge){
+ id
+ title
+description
+case_number{
+  prefix
+  suffix
+ }
+plaintiff {
+    party_type
+    party_id
+    {
+id
+email
+cellphone
+name
+
+    }
+}
+defendant{
+    party_type
+    name
+    email
+    cellphone
+    served{
+    text
+    timestamp
+    }
+}
+court_station{
+    name
+}
+case_type {
+    name
+}
+case_category {
+   name
+}
+form{
+   type_of_form{
+   name
+   }
+   path
+}
+payment {
+   fee
+}
+judge
+verdict{
+ruling
+date
+timestamp
+}
+hearing{
+date
+judge
+}
+timestamp
+registrar_approval
+advocate{
+    surname
+    first_name
+    last_name
+    practice_number
+    email
+    cellphone
+}
+
+}
+}`
+
 export {
+    addHearingInfo,
+    serveDefendant,
     makeMpesaPayment,
     confirmPayment,
     findServedCases,
