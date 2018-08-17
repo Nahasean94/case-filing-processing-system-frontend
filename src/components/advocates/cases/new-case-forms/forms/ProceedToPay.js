@@ -4,6 +4,8 @@ import {isEmpty} from 'lodash'
 import TextFieldGroup from '../../../../../shared/TextFieldsGroup'
 import PropTypes from "prop-types"
 import {Button, Modal, ModalBody, ModalFooter, ModalHeader, Progress} from "reactstrap"
+import {fetchOptionsOverride} from "../../../../../shared/fetchOverrideOptions"
+import {makeMpesaPayment, registerAdmin} from "../../../../../shared/queries"
 
 var request = require('request')
 const btoa = require('btoa')
@@ -49,49 +51,35 @@ class ProceedToPay extends React.Component {
     onSubmit(e) {
         e.preventDefault()
         if (this.isValid()) {
-            this.setState({errors: {}, isLoading: true})
-            const pad2 = (n) => n < 10 ? '0' + n : n
-
-            const date = new Date()
-
-            const timestamp = date.getFullYear().toString() + pad2(date.getMonth() + 1) + pad2(date.getDate()) + pad2(date.getHours()) + pad2(date.getMinutes()) + pad2(date.getSeconds())
-
-            const password = btoa(174379 + "bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919" + timestamp)
-            const auth = "Bearer C3p7n9hVbUOtzrGeA5etNSTmz1KN"
-            const url = "https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest"
-            request(
-                {
-                    method: 'POST',
-                    url: url,
-                    headers: {
-                        "Authorization": auth
-                    },
-                    json: {
-                        "BusinessShortCode": "174379",
-                        "Password": password,
-                        "Timestamp": timestamp,
-                        "TransactionType": "CustomerPayBillOnline",
-                        "Amount": "1",
-                        "PartyA": "600342",
-                        "PartyB": "174379",
-                        "PhoneNumber": this.state.number,
-                        "CallBackURL": "https://classmite.com/mpesa_response.php",
-                        "AccountReference": "CaseFiling",
-                        "TransactionDesc": "This transaction is to pay for forms for ejudiciary"
+            this.props.graphql
+                .query({
+                    fetchOptionsOverride: fetchOptionsOverride,
+                    resetOnLoad: true,
+                    operation: {
+                        variables: {
+                            phone_number: this.state.number,
+                        },
+                        query: makeMpesaPayment
                     }
-                },
-                (error, response, body) => {
-                    // TODO: Use the body object to extract the response
-                    if (error) {
-                        this.setState({error})
-                        console.log(error)
-                        return
-                    }
-                    this.setState({body})
+                })
+                .request.then(({data,loading,error}) => {
+                if (data) {
+                    this.setState({
+                            phone_number: '',
+                            isLoading: false,
+                            invalid: false,
+                        }
+                    )
+                    this.props.onCheckoutID(data.makeMpesaPayment.CheckoutRequestID)
                     this.props.onClose()
-
                 }
-            )
+                if(loading){
+                    this.setState({isLoading:true})
+                }
+                if(error){
+                    this.setState({error:true})
+                }
+            })
 
         }
     }

@@ -1,14 +1,15 @@
 import React, {Component} from 'react'
-import {connect} from 'react-redux'
 import {addForm, clearForms, deleteForm, updateForm} from "../../../../actions/formActions"
 import validator from "validator"
 import {isEmpty} from "lodash"
-import PropTypes from 'prop-types'
 import {fetchOptionsOverride} from "../../../../shared/fetchOverrideOptions"
-import {findCaseForms} from "../../../../shared/queries"
+import {confirmPayment, findCaseForms} from "../../../../shared/queries"
 import Select from 'react-select'
 import Form from "./forms/Form"
 import ProceedToPay from "./forms/ProceedToPay"
+import {Consumer} from 'graphql-react'
+import PropTypes from 'prop-types'
+import {connect} from 'react-redux'
 
 let caseFormOptions
 
@@ -22,7 +23,8 @@ class Forms extends Component {
             errors: {},
             paid: false,
             confirmed: false,
-            showProceedToPay: false
+            showProceedToPay: false,
+            checkout_id: ''
         }
         // if (localStorage.getItem("Forms")) {
         //     const forms = JSON.parse(localStorage.getItem("Forms"))
@@ -36,6 +38,9 @@ class Forms extends Component {
         this.closeProceedToPay = this.closeProceedToPay.bind(this)
         this.onSave = this.onSave.bind(this)
         this.isPayable = this.isPayable.bind(this)
+        this.onCheckoutID = this.onCheckoutID.bind(this)
+        this.confirmPayment = this.confirmPayment.bind(this)
+
 
     }
 
@@ -85,7 +90,7 @@ class Forms extends Component {
         }
     }
 
-    isFormaValid() {
+    isFormValid() {
         const {errors, isValid} = this.validateForm()
         if (!isValid) {
             this.setState({errors})
@@ -110,15 +115,47 @@ class Forms extends Component {
             this.setState({form: '', errors: {}})
             this.props.addForm(this.state.form)
         }
-    };
+    }
 
     isPayable(e) {
         this.setState({payable: true})
+    }
+    confirmPayment() {
+        this.props.graphql
+            .query({
+                fetchOptionsOverride: fetchOptionsOverride,
+                resetOnLoad: true,
+                operation: {
+                    variables:{
+                        checkout_id:this.state.checkout_id
+                    },
+                    query: confirmPayment
+                }
+            })
+            .request.then(({data, loading, error}) => {
+            if (data) {
+                if (data.confirmPayment.amount_paid>0) {
+                    this.setState({paid: true, payable: false})
+                }else{
+                    this.setState({paid: false, payable: true})
+                }
+            }
+            if (loading) {
+                this.setState({loading: true, error: false})
+            }
+            if (error) {
+                this.setState({loading: false, error: true})
+            }
+        })
+    }
+
+    onCheckoutID(checkout_id) {
+        this.setState({checkout_id,payable:false})
     };
 
     onSave(e) {
         e.preventDefault()
-        if (this.isFormaValid()) {
+        if (this.isFormValid()) {
             localStorage.setItem("Forms", JSON.stringify({form: this.props.forms}))
             localStorage.setItem("view", "forms")
             this.props.toConfirm()
@@ -205,11 +242,11 @@ class Forms extends Component {
                                     disabled={!this.state.payable}><span><i className="fa fa-money"></i></span> Proceed
                                 to pay
                             </button>
-                            <ProceedToPay show={this.state.showProceedToPay} amount={totals}
-                                          onClose={this.closeProceedToPay}/>
+                            <Consumer>{graphql => <ProceedToPay graphql={graphql} show={this.state.showProceedToPay} amount={totals} onClose={this.closeProceedToPay} onCheckoutID={this.onCheckoutID}/>}</Consumer>
                         </td>
                         <td>
-                            <button className="btn btn-sm btn-success" disabled={!this.state.paid}>Confirm payment
+                            <button className="btn btn-sm btn-success" disabled={!this.state.checkout_id} onClick={this.confirmPayment}>Confirm
+                                payment
                             </button>
                         </td>
                     </tr>
@@ -227,7 +264,7 @@ class Forms extends Component {
                     </div>
                     <div className="col-sm-4 offset-sm-1">
                         <button className="form-control btn btn-dark btn-sm"
-                                onClick={this.onSave}>Next
+                                onClick={this.onSave} disabled={!this.state.paid}>Next
                         </button>
                     </div>
                 </div>

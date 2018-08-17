@@ -390,7 +390,34 @@ suffix
 }
 }
 }`
+const makeMpesaPayment = `
+query($phone_number:Long!){
+makeMpesaPayment(phone_number:$phone_number){
+MerchantRequestID
+CheckoutRequestID
+ResponseCode
+ResponseDescription
+CustomerMessage
+}
+}`
+const confirmPayment = `
+query($checkout_id:String!){
+confirmPayment(checkout_id:$checkout_id){
+payment_id
+merchant_id
+phone_no
+amount_paid
+result_code
+result_description
+mpesa_refno
+transaction_date
+checkout_id
+}
+}`
+
 export {
+    makeMpesaPayment,
+    confirmPayment,
     findServedCases,
     findCaseForms,
     addNewCase,
