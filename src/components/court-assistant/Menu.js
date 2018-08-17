@@ -6,15 +6,11 @@ import {Nav, NavItem, NavLink} from "reactstrap"
 export default ({router, active}) => {
     const onPendingCasesLink = (e) => {
         e.preventDefault()
-        router.history.push("/deputy-registrar/dashboard/pending-cases")
+        router.history.push("/assistant/dashboard/pending-cases")
     }
     const onCompleteCasesLink = (e) => {
         e.preventDefault()
-        router.history.push("/deputy-registrar/dashboard/completed-cases")
-    }
-    const onReports = (e) => {
-        e.preventDefault()
-        router.history.push("/deputy-registrar/dashboard/reports")
+        router.history.push("/assistant/dashboard/completed-cases")
     }
 
 
@@ -22,14 +18,8 @@ export default ({router, active}) => {
         <NavItem>
             <NavLink href="" onClick={onPendingCasesLink} active={active === 'pending-cases'}>Pending cases</NavLink>
         </NavItem>
-        {/*<NavItem>*/}
-            {/*<NavLink href="" onClick={onServedCasesLink} active={active === 'served-cases'}>Served cases</NavLink>*/}
-        {/*</NavItem>*/}
         <NavItem>
             <NavLink href="" onClick={onCompleteCasesLink} active={active === 'completed-cases'}>Complete cases</NavLink>
-        </NavItem>
-        <NavItem>
-            <NavLink href="" onClick={onReports} active={active === 'reports'}>Reports</NavLink>
         </NavItem>
     </Nav>
 

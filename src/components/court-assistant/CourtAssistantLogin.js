@@ -92,7 +92,7 @@ class CourtAssistantLogin extends React.Component {
                     }
                     else {
                         this.props.setLoginToken(data.courtAssistantLogin.token)
-                        this.context.router.history.push('/assistant/dashboard')
+                        this.context.router.history.push('/assistant/dashboard/pending-cases')
                         this.setState({
                             loading: false,
                             message: data

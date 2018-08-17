@@ -6,7 +6,7 @@ import {
     getGuardContactInfo,
     getGuardInfo,
     getGuardPaymentInfo,
-    onSuspendCase,
+    onAddVerdict,
     serveDefendant
 } from "../../../shared/queries"
 import {isEmpty} from "lodash"
@@ -31,20 +31,6 @@ import validator from "validator"
 import Select from 'react-select'
 
 
-const judgeOptions = [{
-    label: "Maraga",
-    value: "Maraga"
-}, {
-    label: "Njoki",
-    value: "Njoki"
-}, {
-    label: "Judy",
-    value: "Judy"
-}, {
-    label: "James",
-    value: "James"
-}]
-
 class ViewCase extends Component {
     constructor(props) {
         super(props)
@@ -65,7 +51,7 @@ class ViewCase extends Component {
         this.onChangeJudge = this.onChangeJudge.bind(this)
         this.onChange = this.onChange.bind(this)
         this.onSaveHearing = this.onSaveHearing.bind(this)
-        this.onSuspendHearing = this.onSuspendHearing.bind(this)
+        this.onAddVerdict = this.onAddVerdict.bind(this)
 
     }
 
@@ -230,12 +216,12 @@ class ViewCase extends Component {
     }
 
 
-    onSuspendHearing(e) {
+    onAddVerdict(e) {
         e.preventDefault()
         if (this.isValid()) {
             this.setState({errors: {}, isLoading: true})
             this.setState({loading: true})
-            const message = `The case ${this.state.caseInfo.case_number.prefix}/${this.state.caseInfo.case_number.suffix} been suspended. The reason is: ${this.state.description}`
+            const message = `The case ${this.state.caseInfo.case_number.prefix}/${this.state.caseInfo.case_number.suffix} been close. The verdict is: ${this.state.description}`
 
             this.props.graphql
                 .query({
@@ -245,16 +231,16 @@ class ViewCase extends Component {
                         variables: {
                             id: this.state.caseInfo.id,
                             description: this.state.description,
-                            text: message
+                            text: message,
                         },
-                        query: onSuspendCase
+                        query: onAddVerdict
                     }
                 })
                 .request.then(({data}) => {
                     if (data) {
 
-                        if (data.onSuspendCase) {
-                            this.setState({caseInfo: data.onSuspendCase, isLoading: false})
+                        if (data.onAddVerdict) {
+                            this.setState({caseInfo: data.onAddVerdict, isLoading: false})
                         }
                     }
 
@@ -269,6 +255,7 @@ class ViewCase extends Component {
 
         const {show, onClose} = this.props
         const {id, title, description, case_number, plaintiff, defendant, court_station, case_type, case_category, form, payment, verdict, timestamp, registrar_approval, advocate, hearing, status} = this.state.caseInfo
+
         const {errors, isLoading, invalid, date, judge} = this.state
         const descriptionError = errors.description
         if (show) {
@@ -358,16 +345,16 @@ class ViewCase extends Component {
                                     Verdict
                                 </NavLink>
                             </NavItem>
-                            <NavItem>
-                                <NavLink
-                                    className={classnames({active: this.state.activeTab === 'other'})}
-                                    onClick={() => {
-                                        this.toggle('other')
-                                    }}
-                                >
-                                    Other actions
-                                </NavLink>
-                            </NavItem>
+                            {/*<NavItem>*/}
+                                {/*<NavLink*/}
+                                    {/*className={classnames({active: this.state.activeTab === 'other'})}*/}
+                                    {/*onClick={() => {*/}
+                                        {/*this.toggle('other')*/}
+                                    {/*}}*/}
+                                {/*>*/}
+                                    {/*Other actions*/}
+                                {/*</NavLink>*/}
+                            {/*</NavItem>*/}
                         </Nav>
                         <TabContent activeTab={this.state.activeTab}>
                             <TabPane tabId="basic">
@@ -524,75 +511,20 @@ class ViewCase extends Component {
                                             <td>{hearing.judge}</td>
                                         </tr>
                                         </tbody>
-                                    </table> :!status.state && <form onSubmit={this.onSaveHearing}>
-                                        <div className="row">
-                                        </div>
-                                        {errors.form && <div className="alert alert-danger">{errors.form}</div>}
-                                        <TextFieldGroup
-                                            label="Date of hearing"
-                                            type="date"
-                                            name="date"
-                                            value={date}
-                                            onChange={this.onChange}
-                                            error={errors.date}
-                                        />
-                                        <div className="form-group row">
-                                            <label className="col-sm-3 col-form-label">Judge</label>
-                                            <div className="col-sm-9">
-                                                <Select
-                                                    closeOnSelect={true}
-                                                    onChange={this.onChangeJudge}
-                                                    options={judgeOptions}
-                                                    placeholder="Search Judge"
-                                                    removeSelected={true}
-                                                    value={this.state.judge}
-                                                />
-                                                {errors ? errors.judge && <div className="alert alert-danger">
-                                                    {errors.judge}
-                                                </div> : ''}
-                                            </div>
-                                        </div>
-                                        <div className="form-group row">
-                                            <div className="col-sm-9 offset-3">
-                                                <button disabled={isLoading || invalid}
-                                                        className="btn btn-dark btn-sm form-control"
-                                                        type="submit">Save
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </form>
+                                    </table>:'No hearing date found'
                                     }
 
                                 </div>
                             </TabPane>
                             <TabPane tabId="verdict">
-                                Verdict to be added
-                            </TabPane>
-                            <TabPane tabId="other">
-
-                                {status && status.state ? <table className="table table-borderless">
-                                    <tbody>
-                                    <tr>
-                                        <th scope="row">Status</th>
-                                        <td>{status.state}</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">Date</th>
-                                        <td>{new Date(status.timestamp).toLocaleDateString()}</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">Text</th>
-                                        <td>{status.text}</td>
-                                    </tr>
-                                    </tbody>
-
-                                </table> : <form onSubmit={this.onSuspendHearing}>
-                                    <h3>Suspend case</h3>
-                                    <div className="row">
-                                    </div>
+                                {/*{console.log(verdict)}*/}
+                                {!verdict.description? <form onSubmit={this.onAddVerdict}>
+                                        <div className="offset-sm-3">
+                                    <h3>Enter verdict of the case</h3>
+                                        </div>
                                     {errors.form && <div className="alert alert-danger">{errors.form}</div>}
                                     <div className="form-group row">
-                                        <div className="col-sm-3"><label htmlFor="description">Reason for suspending the case</label>
+                                        <div className="col-sm-3"><label htmlFor="description">Verdict</label>
                                         </div>
                                         <div className="col-sm-6">
                         <textarea name="description" onChange={this.onChange}
@@ -610,7 +542,42 @@ class ViewCase extends Component {
                                             </button>
                                         </div>
                                     </div>
-                                </form>}
+                                </form>:
+                                <table className="table">
+                                <tbody>
+                                <tr>
+                                    <th scope="row">Description</th>
+                                    <td>{verdict.description}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Date</th>
+                                    <td>{new Date(verdict.date).toLocaleDateString()}</td>
+                                </tr>
+
+                                </tbody>
+
+                            </table>}
+                            </TabPane>
+                            <TabPane tabId="other">
+
+                                {status && status.state && <table className="table table-borderless">
+                                    <tbody>
+                                    <tr>
+                                        <th scope="row">Status</th>
+                                        <td>{status.state}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Date</th>
+                                        <td>{new Date(status.timestamp).toLocaleDateString()}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Text</th>
+                                        <td>{status.text}</td>
+                                    </tr>
+                                    </tbody>
+
+                                </table>
+                           }
                             </TabPane>
                         </TabContent>
 

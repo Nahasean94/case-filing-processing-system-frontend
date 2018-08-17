@@ -2,7 +2,7 @@ import React from 'react'
 import ViewCase from "../modals/ViewCase"
 import {Consumer} from 'graphql-react'
 
-class PendingCase extends React.Component {
+class Case extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -22,13 +22,12 @@ class PendingCase extends React.Component {
     }
 
     render() {
-        const {id,case_number, title, timestamp, advocate} = this.props.pendingCase
+        const {id,case_number, title, timestamp, advocate} = this.props.results
 
         return (
             <tr>
                 <td><a href="" onClick={this.showViewCaseModal}>{case_number.prefix}/{case_number.suffix}</a></td>
                 <td>{title}</td>
-                {console.log(this.props.pendingCase)}
                 <td>{advocate.surname}</td>
                 <td>{new Date(timestamp).toLocaleDateString()}</td>
                 <Consumer>{graphql=><ViewCase graphql={graphql} show={this.state.showViewCaseModal} onClose={this.closeViewCaseModal} id={id}/>}</Consumer>
@@ -37,4 +36,4 @@ class PendingCase extends React.Component {
     }
 }
 
-export default PendingCase
+export default Case

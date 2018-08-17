@@ -296,6 +296,16 @@ name
 
     }
 }
+status{
+state
+text
+timestamp
+}
+hearing{
+date
+judge
+}
+
 defendant{
     party_type
     name
@@ -326,9 +336,8 @@ payment {
 }
 judge
 verdict{
-ruling
+description
 date
-timestamp
 }
 timestamp
 registrar_approval
@@ -440,6 +449,11 @@ name
 
     }
 }
+status{
+state
+text
+timestamp
+}
 defendant{
     party_type
     name
@@ -470,10 +484,14 @@ payment {
 }
 judge
 verdict{
-ruling
+description
 date
-timestamp
 }
+hearing{
+date
+judge
+}
+
 timestamp
 registrar_approval
 advocate{
@@ -488,8 +506,8 @@ advocate{
 }
 }`
 const addHearingInfo= `
-mutation($id:ID!,$date:String!,$judge:String!){
-addHearingInfo(id:$id,date:$date,judge:$judge){
+mutation($id:ID!,$date:String!,$judge:String!,$text:String){
+addHearingInfo(id:$id,date:$date,judge:$judge,text:$text){
  id
  title
 description
@@ -508,6 +526,11 @@ name
 
     }
 }
+status{
+state
+text
+timestamp
+}
 defendant{
     party_type
     name
@@ -538,9 +561,8 @@ payment {
 }
 judge
 verdict{
-ruling
+description
 date
-timestamp
 }
 hearing{
 date
@@ -560,7 +582,244 @@ advocate{
 }
 }`
 
+const onSuspendCase= `
+mutation($id:ID!,$description:String!,$text:String){
+onSuspendCase(id:$id,description:$description,text:$text){
+ id
+ title
+description
+case_number{
+  prefix
+  suffix
+ }
+plaintiff {
+    party_type
+    party_id
+    {
+id
+email
+cellphone
+name
+
+    }
+}
+status{
+state
+text
+timestamp
+}
+defendant{
+    party_type
+    name
+    email
+    cellphone
+    served{
+    text
+    timestamp
+    }
+}
+court_station{
+    name
+}
+case_type {
+    name
+}
+case_category {
+   name
+}
+form{
+   type_of_form{
+   name
+   }
+   path
+}
+payment {
+   fee
+}
+judge
+verdict{
+description
+date
+}
+hearing{
+date
+judge
+}
+
+timestamp
+registrar_approval
+advocate{
+    surname
+    first_name
+    last_name
+    practice_number
+    email
+    cellphone
+}
+
+}
+}`
+
+const onAddVerdict= `
+mutation($id:ID!,$description:String!,$text:String){
+onAddVerdict(id:$id,description:$description,text:$text){
+ id
+ title
+description
+case_number{
+  prefix
+  suffix
+ }
+plaintiff {
+    party_type
+    party_id
+    {
+id
+email
+cellphone
+name
+
+    }
+}
+status{
+state
+text
+timestamp
+}
+defendant{
+    party_type
+    name
+    email
+    cellphone
+    served{
+    text
+    timestamp
+    }
+}
+court_station{
+    name
+}
+case_type {
+    name
+}
+case_category {
+   name
+}
+form{
+   type_of_form{
+   name
+   }
+   path
+}
+payment {
+   fee
+}
+judge
+verdict{
+description
+date
+}
+hearing{
+date
+judge
+}
+
+timestamp
+registrar_approval
+advocate{
+    surname
+    first_name
+    last_name
+    practice_number
+    email
+    cellphone
+}
+
+}
+}`
+
+const searchCourtCases= `
+query($state:String!,$search:String!){
+searchCourtCases(state:$state,search:$search){
+ id
+ title
+description
+case_number{
+  prefix
+  suffix
+ }
+plaintiff {
+    party_type
+    party_id
+    {
+id
+email
+cellphone
+name
+
+    }
+}
+status{
+state
+text
+timestamp
+}
+defendant{
+    party_type
+    name
+    email
+    cellphone
+    served{
+    text
+    timestamp
+    }
+}
+court_station{
+    name
+}
+case_type {
+    name
+}
+case_category {
+   name
+}
+form{
+   type_of_form{
+   name
+   }
+   path
+}
+payment {
+   fee
+}
+judge
+verdict{
+description
+date
+}
+hearing{
+date
+judge
+}
+
+timestamp
+registrar_approval
+advocate{
+    surname
+    first_name
+    last_name
+    practice_number
+    email
+    cellphone
+}
+
+}
+}`
+
 export {
+    searchCourtCases,
+    onAddVerdict,
+    onSuspendCase,
     addHearingInfo,
     serveDefendant,
     makeMpesaPayment,

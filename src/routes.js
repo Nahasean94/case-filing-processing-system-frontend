@@ -24,12 +24,15 @@ import requireDeputyRegistrarAuth from "./components/utils/requireDeputyRegistra
 import NewCase from "./components/advocates/cases/NewCase"
 import PendingCases from "./components/advocates/cases/pending-cases/PendingCases"
 import CompletedCases from "./components/advocates/cases/closed-cases/CompletedCases"
+import AssistantPendingCases from "./components/court-assistant/pending-cases/PendingCases"
+import AssistantCompletedCases from "./components/court-assistant/closed-cases/CompletedCases"
 import ServedCases from "./components/advocates/cases/served-cases/ServedCases"
 import Clientele from "./components/advocates/clientele/Clientele"
 import DeputyPendingCases from "./components/deputy-registrar/pending-cases/PendingCases"
 import DeputyCompletedCases from "./components/deputy-registrar/closed-cases/CompletedCases"
 import Profile from "./components/advocates/profile/Profile"
 import CaseTypes from "./components/admin/case-type/CaseTypes"
+import Cases from "./components/deputy-registrar/reports/Cases"
 
 export default () => {
 
@@ -72,6 +75,12 @@ export default () => {
                         <Route exact path="/advocates/dashboard/completed-cases"
                                component={requireAdvocateAuth(CompletedCases)}
                         />
+                        <Route exact path="/assistant/dashboard/pending-cases"
+                               component={requireAssistantAuth(AssistantPendingCases)}
+                        />
+                        <Route exact path="/assistant/dashboard/completed-cases"
+                               component={requireAssistantAuth(AssistantCompletedCases)}
+                        />
                         <Route exact path="/advocates/dashboard/served-cases"
                                component={requireAdvocateAuth(ServedCases)}
                         />
@@ -84,7 +93,9 @@ export default () => {
 
                         <Route exact path="/advocates/dashboard/clientele" component={requireAdvocateAuth(Clientele)}
                         />
-                        <Route exact path="/advocates/dashboard/profile" component={requireAdvocateAuth(Profile)}
+                        <Route exact path="/advocates/dashboard/clientele" component={requireAdvocateAuth(Clientele)}
+                        />
+                        <Route exact path="/deputy-registrar/dashboard/reports" component={requireDeputyRegistrarAuth(Cases)}
                         />
                     </Switch>
                 </App>

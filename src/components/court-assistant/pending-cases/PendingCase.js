@@ -28,7 +28,6 @@ class PendingCase extends React.Component {
             <tr>
                 <td><a href="" onClick={this.showViewCaseModal}>{case_number.prefix}/{case_number.suffix}</a></td>
                 <td>{title}</td>
-                {console.log(this.props.pendingCase)}
                 <td>{advocate.surname}</td>
                 <td>{new Date(timestamp).toLocaleDateString()}</td>
                 <Consumer>{graphql=><ViewCase graphql={graphql} show={this.state.showViewCaseModal} onClose={this.closeViewCaseModal} id={id}/>}</Consumer>
